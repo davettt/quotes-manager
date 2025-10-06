@@ -45,56 +45,73 @@ source ~/.zshrc  # or source ~/.bashrc
 
 ## Quick Start
 
-### Add your first quote
+### Launch the interactive menu (recommended)
+
+Simply run:
 
 ```bash
+quotes
+```
+
+This opens a beautiful interactive menu where you can:
+
+```
+╔════════════════════════════════════════════╗
+║          Quotes Manager - Main Menu        ║
+╚════════════════════════════════════════════╝
+
+  1 - Add new quote
+  2 - View daily quote
+  3 - List all quotes
+  4 - Search quotes
+  5 - View quote details
+  6 - Edit quote
+  7 - Delete quote
+  8 - Setup shell integration
+  9 - Exit
+
+Choice [9]:
+```
+
+The menu is the easiest way to use Quotes Manager for daily tasks!
+
+### Using direct commands
+
+You can also run commands directly (useful for scripting or quick actions):
+
+```bash
+# Add a new quote
 quotes add
-```
 
-Follow the interactive prompts to add a quote with context. The AI will:
-- Identify the author if you don't know it
-- Check for duplicates in your collection
-- Suggest relevant categories
-
-### See your daily quote
-
-```bash
+# See your daily quote
 quotes daily
-```
 
-Or set up shell integration so it appears automatically when you open your terminal!
-
-### Search your collection
-
-```bash
 # Search by keyword
 quotes search "passion work"
 
 # List all quotes
 quotes list
 
-# Filter by category
+# Filter by category or author
 quotes list --category inspiration
-
-# Filter by author
 quotes list --author "Steve Jobs"
-```
 
-### View quote details
-
-```bash
+# View quote details (with AI explanation option)
 quotes view <quote-id>
+
+# Set up shell integration for daily quotes
+quotes setup
 ```
 
-Press `E` to get an AI explanation of the quote!
+## Available Commands
 
-## Commands
+All commands can be run directly or accessed through the interactive menu:
 
-- `add` - Add a new quote to your collection
-- `daily` - Show today's quote
+- `add` - Add a new quote with AI-powered categorization
+- `daily` - Show today's quote (no repeats for 21 days)
 - `list` - List all quotes (with optional filters)
 - `search` - Search quotes by keyword
-- `view` - View detailed information about a quote
+- `view` - View detailed information with AI explanation option
 - `edit` - Edit an existing quote
 - `delete` - Delete a quote
 - `setup` - Set up automatic daily quotes in your terminal
