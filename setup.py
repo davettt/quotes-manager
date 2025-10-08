@@ -29,6 +29,7 @@ setup(
     packages=find_packages(exclude=["tests", "*.tests", "*.tests.*", "tests.*"]),
     include_package_data=True,
     install_requires=requirements,
+    py_modules=["main", "version"],
     entry_points={
         "console_scripts": [
             "quotes=main:app",

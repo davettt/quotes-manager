@@ -98,7 +98,7 @@ def run_interactive_menu():
             elif choice == "3":
                 # List all quotes
                 console.clear()
-                list_quotes(category=None, author=None, limit=10, all=False)
+                list_quotes(category=None, author=None, limit=10, all=True)
                 Prompt.ask("\n[dim]Press Enter to continue[/dim]", default="")
 
             elif choice == "4":

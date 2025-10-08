@@ -13,35 +13,71 @@ A beautiful CLI tool for saving, organizing, and reflecting on meaningful quotes
 
 ## Installation
 
+### Step 1: Clone and Install
+
 ```bash
 # Clone the repository
 git clone <repo-url>
 cd quotes-manager
 
-# Install in development mode (creates 'quotes' command)
-pip install -e .
+# Install the package
+pip install .
+```
 
-# Set up your API key
+### Step 2: Set Up PATH (Required)
+
+After installation, you need to add Python's user bin directory to your PATH so the `quotes` command works from anywhere:
+
+```bash
+# For macOS, add to ~/.zshrc or ~/.bash_profile:
+# Note: Replace 3.9 with your Python version if different
+export PATH="$HOME/Library/Python/3.9/bin:$PATH"
+
+# For Linux, add to ~/.bashrc or ~/.zshrc:
+export PATH="$HOME/.local/bin:$PATH"
+
+# Then reload your shell:
+source ~/.zshrc  # or source ~/.bashrc / source ~/.bash_profile
+```
+
+**To verify it works:**
+```bash
+quotes --version
+```
+
+You should see: `Quotes Manager v1.0.0-dev`
+
+### Step 3: Configure API Key
+
+```bash
+# Copy the example environment file
 cp .env.example .env
+
 # Edit .env and add your Anthropic API key:
 # ANTHROPIC_API_KEY=sk-ant-...
+```
 
-# Set up shell integration (optional but recommended)
+You can get an API key from [Anthropic's Console](https://console.anthropic.com/).
+
+### Step 4: Set Up Shell Integration (Optional)
+
+For daily quotes to appear automatically when you open your terminal:
+
+```bash
 quotes setup
 ```
 
-After installation, you can use the `quotes` command directly from anywhere in your terminal!
+---
 
-**Note:** If the `quotes` command is not found, you may need to add Python's user bin directory to your PATH:
+### For Developers
+
+If you want to modify the code and see changes immediately, use editable mode:
 
 ```bash
-# For macOS/Linux, add to ~/.zshrc or ~/.bashrc:
-export PATH="$HOME/Library/Python/3.9/bin:$PATH"  # macOS
-export PATH="$HOME/.local/bin:$PATH"              # Linux
-
-# Then reload your shell:
-source ~/.zshrc  # or source ~/.bashrc
+pip install -e .
 ```
+
+This creates a live link to your code, so any changes you make are reflected without reinstalling.
 
 ## Quick Start
 
