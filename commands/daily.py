@@ -3,20 +3,21 @@
 import random
 from datetime import datetime
 from typing import Optional
+
 import typer
 from rich.console import Console
 from rich.panel import Panel
 from rich.text import Text
 
 from models.quote import Quote
+from utils.display import display_warning, set_theme
 from utils.storage import (
+    add_to_display_history,
+    get_display_history,
+    get_last_daily_display,
     load_quotes,
     save_quotes,
-    get_display_history,
-    add_to_display_history,
-    get_last_daily_display,
 )
-from utils.display import display_warning
 
 console = Console()
 
@@ -86,6 +87,9 @@ def show_daily(
     force: bool = typer.Option(
         False, "--force", "-f", help="Show new quote even if one shown today"
     ),
+    theme: str = typer.Option(
+        None, "--theme", help="Color theme: auto, dark, light, high-contrast, none"
+    ),
 ):
     """
     Display today's quote of the day.
@@ -93,6 +97,10 @@ def show_daily(
     Shows a different quote each day, with no repeats within 21 days.
     Use --quiet for a minimal display suitable for shell startup.
     """
+    # Set theme if provided
+    if theme:
+        set_theme(theme)
+
     quote = get_daily_quote(force=force)
 
     if not quote:

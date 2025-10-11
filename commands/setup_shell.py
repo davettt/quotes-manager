@@ -2,6 +2,7 @@
 
 import os
 from pathlib import Path
+
 from rich.console import Console
 from rich.panel import Panel
 
@@ -66,9 +67,15 @@ def setup_shell():
     console.print(f"  1. Open your profile file: [cyan]{profile_path}[/cyan]")
     console.print("  2. Add the line above at the end of the file")
     console.print("  3. Save and close the file")
-    console.print(f"  4. Restart your terminal, or run: [cyan]source {profile_path}[/cyan]\n")
+    console.print(
+        f"  4. Restart your terminal, or run: [cyan]source {profile_path}[/cyan]\n"
+    )
 
-    console.print("[dim]Note: Make sure you've installed this package first with:[/dim]")
+    console.print(
+        "[dim]Note: Make sure you've installed this package first with:[/dim]"
+    )
     console.print("[dim]pip install -e .[/dim]\n")
 
-    console.print("[green]✓ That's it! Your daily quote will appear when you open a new terminal.[/green]\n")
+    console.print(
+        "[green]✓ That's it! Your daily quote will appear when you open a new terminal.[/green]\n"
+    )

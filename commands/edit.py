@@ -4,14 +4,22 @@ import typer
 from rich.console import Console
 from rich.prompt import Prompt
 
-from utils.storage import load_quotes, update_quote, get_quote_by_id
-from utils.display import display_success, display_error, display_quote_detailed
+from utils.display import (
+    display_error,
+    display_quote_detailed,
+    display_success,
+    set_theme,
+)
+from utils.storage import get_quote_by_id, load_quotes, update_quote
 
 console = Console()
 
 
 def edit_quote(
-    quote_id: str = typer.Argument(..., help="Quote ID to edit (full or partial)")
+    quote_id: str = typer.Argument(..., help="Quote ID to edit (full or partial)"),
+    theme: str = typer.Option(
+        None, "--theme", help="Color theme: auto, dark, light, high-contrast, none"
+    ),
 ):
     """
     Edit an existing quote.
@@ -22,6 +30,10 @@ def edit_quote(
         quotes edit a1b2c3d4
         quotes edit a1b2     # Partial ID works too
     """
+    # Set theme if provided
+    if theme:
+        set_theme(theme)
+
     # Find quote by full or partial ID
     quotes = load_quotes()
 

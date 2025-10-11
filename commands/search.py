@@ -3,8 +3,8 @@
 import typer
 from rich.console import Console
 
+from utils.display import display_search_results, display_warning, set_theme
 from utils.storage import load_quotes
-from utils.display import display_search_results, display_warning
 
 console = Console()
 
@@ -13,6 +13,9 @@ def search_quotes(
     query: str = typer.Argument(..., help="Search query (keywords to find in quotes)"),
     case_sensitive: bool = typer.Option(
         False, "--case-sensitive", "-c", help="Case-sensitive search"
+    ),
+    theme: str = typer.Option(
+        None, "--theme", help="Color theme: auto, dark, light, high-contrast, none"
     ),
 ):
     """
@@ -25,6 +28,10 @@ def search_quotes(
         quotes search "steve jobs"
         quotes search "work life" --case-sensitive
     """
+    # Set theme if provided
+    if theme:
+        set_theme(theme)
+
     quotes = load_quotes()
 
     if not quotes:

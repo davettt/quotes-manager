@@ -5,9 +5,8 @@ from datetime import datetime
 from pathlib import Path
 from typing import Dict, List, Optional
 
-from models.quote import Quote
 from models.config import Config
-
+from models.quote import Quote
 
 # Storage paths
 BASE_DIR = Path(__file__).parent.parent

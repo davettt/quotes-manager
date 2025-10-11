@@ -3,8 +3,8 @@
 import typer
 from rich.console import Console
 
+from utils.display import display_quote_list, display_warning, set_theme
 from utils.storage import load_quotes
-from utils.display import display_quote_list, display_warning
 
 console = Console()
 
@@ -14,6 +14,9 @@ def list_quotes(
     author: str = typer.Option(None, "--author", "-a", help="Filter by author"),
     limit: int = typer.Option(10, "--limit", "-l", help="Maximum quotes to display"),
     all: bool = typer.Option(False, "--all", help="Show all quotes"),
+    theme: str = typer.Option(
+        None, "--theme", help="Color theme: auto, dark, light, high-contrast, none"
+    ),
 ):
     """
     List all quotes with optional filtering.
@@ -24,6 +27,10 @@ def list_quotes(
         quotes list --category work    # Show quotes in 'work' category
         quotes list --author "Steve Jobs"  # Show quotes by Steve Jobs
     """
+    # Set theme if provided
+    if theme:
+        set_theme(theme)
+
     quotes = load_quotes()
 
     if not quotes:

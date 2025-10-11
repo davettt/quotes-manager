@@ -1,10 +1,11 @@
 """Interactive category selector for quotes."""
 
 from typing import List
+
 from rich.console import Console
+from rich.panel import Panel
 from rich.prompt import Prompt
 from rich.table import Table
-from rich.panel import Panel
 
 console = Console()
 

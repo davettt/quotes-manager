@@ -1,0 +1,70 @@
+# Project configuration for Quotes Manager
+# Centralized configuration for all code quality tools
+
+[tool.ruff]
+line-length = 88
+exclude = [
+    ".git",
+    ".venv",
+    "venv",
+    "__pycache__",
+    "local_data/",
+    ".mypy_cache",
+    ".pytest_cache",
+    ".ruff_cache",
+    ".claude/",
+    "build/",
+    "dist/",
+    "*.egg-info/",
+]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "W"]
+ignore = ["E501"]
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["F401"]
+
+[tool.black]
+line-length = 88
+target-version = ['py37', 'py38', 'py39', 'py310', 'py311']
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.git
+  | \.venv
+  | venv
+  | __pycache__
+  | local_data
+  | \.mypy_cache
+  | \.pytest_cache
+  | \.ruff_cache
+  | \.claude
+  | build
+  | dist
+  | .*\.egg-info
+)/
+'''
+
+[tool.bandit]
+exclude_dirs = [
+    ".git",
+    ".venv",
+    "venv",
+    "__pycache__",
+    "local_data/",
+    ".mypy_cache",
+    ".pytest_cache",
+    ".ruff_cache",
+    ".claude/",
+    "build/",
+    "dist/",
+]
+skips = ["B110", "B311"]  # B110: try-except-pass is intentional, B311: random is not for crypto
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = "test_*.py"
+python_classes = "Test*"
+python_functions = "test_*"
+addopts = ["--verbose"]

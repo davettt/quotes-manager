@@ -6,6 +6,8 @@ from rich.prompt import Prompt
 from rich.table import Table
 from rich.text import Text
 
+from utils.themes import get_color
+
 console = Console()
 
 
@@ -15,13 +17,13 @@ def display_menu() -> None:
 
     # Create title
     title = Text()
-    title.append("Quotes Manager", style="bold cyan")
-    title.append(" - Interactive Menu", style="dim")
+    title.append("Quotes Manager", style=f"bold {get_color('primary')}")
+    title.append(" - Interactive Menu", style=get_color("dim"))
 
     # Create menu table
     table = Table(show_header=False, box=None, padding=(0, 2))
-    table.add_column("Number", style="dim yellow", width=4)
-    table.add_column("Command", style="cyan")
+    table.add_column("Number", style=get_color("warning"), width=4)
+    table.add_column("Command", style=get_color("primary"))
 
     menu_items = [
         ("1", "Add new quote"),
@@ -32,6 +34,7 @@ def display_menu() -> None:
         ("6", "Edit quote"),
         ("7", "Delete quote"),
         ("8", "Setup shell integration"),
+        ("9", "Change theme"),
         ("0", "Exit"),
     ]
 
@@ -42,7 +45,7 @@ def display_menu() -> None:
     panel = Panel(
         table,
         title=title,
-        border_style="blue",
+        border_style=get_color("border"),
         padding=(1, 2),
     )
 
@@ -58,9 +61,10 @@ def get_menu_choice() -> str:
     Returns:
         Selected menu option as string
     """
+    prompt_style = f"bold {get_color('warning')}"
     choice = Prompt.ask(
-        "[bold yellow]Select an option[/bold yellow]",
-        choices=["0", "1", "2", "3", "4", "5", "6", "7", "8"],
+        f"[{prompt_style}]Select an option[/{prompt_style}]",
+        choices=["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"],
         default="0",
     )
     return choice

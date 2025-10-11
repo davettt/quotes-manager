@@ -1,7 +1,9 @@
 """Quote explanation using Claude AI."""
 
 from typing import Dict
+
 from rich.console import Console
+
 from ai.claude_client import get_client, is_api_available
 
 console = Console()

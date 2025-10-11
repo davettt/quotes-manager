@@ -1,19 +1,20 @@
 """Add quote command implementation."""
 
-import typer
-from rich.console import Console
-from rich.prompt import Prompt
-from rich.panel import Panel
 from datetime import datetime
 
-from models.quote import Quote, AIMetadata
-from utils.storage import load_quotes, save_quotes
-from utils.display import display_success, display_warning
-from utils.category_selector import select_categories
-from ai.claude_client import is_api_available
+import typer
+from rich.console import Console
+from rich.panel import Panel
+from rich.prompt import Prompt
+
 from ai.author_identifier import identify_author
 from ai.categorizer import suggest_categories
+from ai.claude_client import is_api_available
 from ai.duplicate_detector import check_duplicates, get_similarity_level
+from models.quote import AIMetadata, Quote
+from utils.category_selector import select_categories
+from utils.display import display_success, display_warning, set_theme
+from utils.storage import load_quotes, save_quotes
 
 console = Console()
 
@@ -29,6 +30,9 @@ def add_quote(
     skip_ai: bool = typer.Option(
         False, "--skip-ai", help="Skip AI features (author lookup, duplicates, etc.)"
     ),
+    theme: str = typer.Option(
+        None, "--theme", help="Color theme: auto, dark, light, high-contrast, none"
+    ),
 ):
     """
     Add a new quote to your collection.
@@ -39,6 +43,10 @@ def add_quote(
     If you provide --text, other fields default to empty if not specified.
     If you don't provide --text, you'll be prompted interactively for all fields.
     """
+    # Set theme if provided
+    if theme:
+        set_theme(theme)
+
     # Determine if we're in interactive mode (no text provided)
     interactive_mode = text is None
 

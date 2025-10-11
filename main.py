@@ -9,18 +9,19 @@ import typer
 from rich.console import Console
 from rich.prompt import Prompt
 
-from version import __version__
-
 # Import command implementations
 from commands.add import add_quote
-from commands.list_cmd import list_quotes
-from commands.view import view_quote
-from commands.search import search_quotes
-from commands.edit import edit_quote
-from commands.delete import delete_quote_command
 from commands.daily import show_daily
+from commands.delete import delete_quote_command
+from commands.edit import edit_quote
+from commands.list_cmd import list_quotes
+from commands.search import search_quotes
 from commands.setup_shell import setup_shell
+from commands.theme import change_theme_command
+from commands.view import view_quote
 from utils.menu import display_menu, get_menu_choice
+from utils.themes import get_color
+from version import __version__
 
 # Initialize Typer app
 app = typer.Typer(
@@ -73,7 +74,8 @@ def run_interactive_menu():
             choice = get_menu_choice()
 
             if choice == "0":
-                console.print("\n[cyan]Goodbye! 📖✨[/cyan]\n")
+                goodbye_style = get_color("primary")
+                console.print(f"\n[{goodbye_style}]Goodbye! 📖✨[/{goodbye_style}]\n")
                 return  # Exit the loop cleanly
 
             elif choice == "1":
@@ -86,68 +88,119 @@ def run_interactive_menu():
                     note=None,
                     categories=None,
                     skip_ai=False,
+                    theme=None,
                 )
-                Prompt.ask("\n[dim]Press Enter to continue[/dim]", default="")
+                dim_style = get_color("dim")
+                Prompt.ask(
+                    f"\n[{dim_style}]Press Enter to continue[/{dim_style}]", default=""
+                )
 
             elif choice == "2":
                 # View daily quote
                 console.clear()
-                show_daily(quiet=False, force=False)
-                Prompt.ask("\n[dim]Press Enter to continue[/dim]", default="")
+                show_daily(quiet=False, force=False, theme=None)
+                dim_style = get_color("dim")
+                Prompt.ask(
+                    f"\n[{dim_style}]Press Enter to continue[/{dim_style}]", default=""
+                )
 
             elif choice == "3":
                 # List all quotes
                 console.clear()
-                list_quotes(category=None, author=None, limit=10, all=True)
-                Prompt.ask("\n[dim]Press Enter to continue[/dim]", default="")
+                list_quotes(category=None, author=None, limit=10, all=True, theme=None)
+                dim_style = get_color("dim")
+                Prompt.ask(
+                    f"\n[{dim_style}]Press Enter to continue[/{dim_style}]", default=""
+                )
 
             elif choice == "4":
                 # Search quotes
                 console.clear()
-                query = Prompt.ask("[bold cyan]Search query[/bold cyan]")
+                prompt_style = f"bold {get_color('primary')}"
+                query = Prompt.ask(f"[{prompt_style}]Search query[/{prompt_style}]")
                 if query:
-                    search_quotes(query=query, case_sensitive=False)
-                Prompt.ask("\n[dim]Press Enter to continue[/dim]", default="")
+                    search_quotes(query=query, case_sensitive=False, theme=None)
+                dim_style = get_color("dim")
+                Prompt.ask(
+                    f"\n[{dim_style}]Press Enter to continue[/{dim_style}]", default=""
+                )
 
             elif choice == "5":
                 # View quote details
                 console.clear()
-                quote_id = Prompt.ask("[bold cyan]Enter quote ID[/bold cyan]")
+                prompt_style = f"bold {get_color('primary')}"
+                quote_id = Prompt.ask(
+                    f"[{prompt_style}]Enter quote ID[/{prompt_style}]"
+                )
                 if quote_id:
-                    view_quote(quote_id=quote_id)
-                Prompt.ask("\n[dim]Press Enter to continue[/dim]", default="")
+                    view_quote(quote_id=quote_id, theme=None)
+                dim_style = get_color("dim")
+                Prompt.ask(
+                    f"\n[{dim_style}]Press Enter to continue[/{dim_style}]", default=""
+                )
 
             elif choice == "6":
                 # Edit quote
                 console.clear()
-                quote_id = Prompt.ask("[bold cyan]Enter quote ID to edit[/bold cyan]")
+                prompt_style = f"bold {get_color('primary')}"
+                quote_id = Prompt.ask(
+                    f"[{prompt_style}]Enter quote ID to edit[/{prompt_style}]"
+                )
                 if quote_id:
-                    edit_quote(quote_id=quote_id)
-                Prompt.ask("\n[dim]Press Enter to continue[/dim]", default="")
+                    edit_quote(quote_id=quote_id, theme=None)
+                dim_style = get_color("dim")
+                Prompt.ask(
+                    f"\n[{dim_style}]Press Enter to continue[/{dim_style}]", default=""
+                )
 
             elif choice == "7":
                 # Delete quote
                 console.clear()
-                quote_id = Prompt.ask("[bold cyan]Enter quote ID to delete[/bold cyan]")
+                prompt_style = f"bold {get_color('primary')}"
+                quote_id = Prompt.ask(
+                    f"[{prompt_style}]Enter quote ID to delete[/{prompt_style}]"
+                )
                 if quote_id:
-                    delete_quote_command(quote_id=quote_id, force=False)
-                Prompt.ask("\n[dim]Press Enter to continue[/dim]", default="")
+                    delete_quote_command(quote_id=quote_id, force=False, theme=None)
+                dim_style = get_color("dim")
+                Prompt.ask(
+                    f"\n[{dim_style}]Press Enter to continue[/{dim_style}]", default=""
+                )
 
             elif choice == "8":
                 # Setup shell integration
                 console.clear()
                 setup_shell()
-                Prompt.ask("\n[dim]Press Enter to continue[/dim]", default="")
+                dim_style = get_color("dim")
+                Prompt.ask(
+                    f"\n[{dim_style}]Press Enter to continue[/{dim_style}]", default=""
+                )
+
+            elif choice == "9":
+                # Change theme
+                console.clear()
+                from commands.theme import change_theme_interactive
+
+                change_theme_interactive()
+                dim_style = get_color("dim")
+                Prompt.ask(
+                    f"\n[{dim_style}]Press Enter to continue[/{dim_style}]", default=""
+                )
 
         except KeyboardInterrupt:
-            console.print("\n\n[cyan]Goodbye! 📖✨[/cyan]\n")
+            goodbye_style = get_color("primary")
+            console.print(f"\n\n[{goodbye_style}]Goodbye! 📖✨[/{goodbye_style}]\n")
             return  # Exit cleanly
         except typer.Exit:
             # Don't catch typer.Exit - let it propagate
             raise
         except Exception as e:
-            console.print(f"\n[red]Error: {e}[/red]\n")
-            Prompt.ask("[dim]Press Enter to continue[/dim]", default="")
+            error_style = get_color("error")
+            console.print(f"\n[{error_style}]Error: {e}[/{error_style}]\n")
+            dim_style = get_color("dim")
+            Prompt.ask(
+                f"[{dim_style}]Press Enter to continue[/{dim_style}]", default=""
+            )
 
 
 # Register commands
@@ -159,6 +212,7 @@ app.command(name="edit")(edit_quote)
 app.command(name="delete")(delete_quote_command)
 app.command(name="daily")(show_daily)
 app.command(name="setup")(setup_shell)
+app.command(name="theme")(change_theme_command)
 
 
 if __name__ == "__main__":

@@ -1,7 +1,9 @@
 """Duplicate detection using semantic similarity with Claude AI."""
 
-from typing import Dict, Any, List
+from typing import Any, Dict, List
+
 from rich.console import Console
+
 from ai.claude_client import get_client, is_api_available
 
 console = Console()

@@ -1,9 +1,9 @@
 """Quote data model."""
 
+import uuid
 from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Dict, List, Optional
-import uuid
 
 
 @dataclass

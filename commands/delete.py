@@ -4,12 +4,14 @@ import typer
 from rich.console import Console
 from rich.prompt import Confirm
 
+from utils.display import display_error, display_success, display_warning, set_theme
 from utils.storage import (
-    load_quotes,
     delete_quote as storage_delete_quote,
-    get_quote_by_id,
 )
-from utils.display import display_success, display_error, display_warning
+from utils.storage import (
+    get_quote_by_id,
+    load_quotes,
+)
 
 console = Console()
 
@@ -17,6 +19,9 @@ console = Console()
 def delete_quote_command(
     quote_id: str = typer.Argument(..., help="Quote ID to delete (full or partial)"),
     force: bool = typer.Option(False, "--force", "-f", help="Skip confirmation prompt"),
+    theme: str = typer.Option(
+        None, "--theme", help="Color theme: auto, dark, light, high-contrast, none"
+    ),
 ):
     """
     Delete a quote from your collection.
@@ -28,6 +33,10 @@ def delete_quote_command(
         quotes delete a1b2     # Partial ID works too
         quotes delete a1b2 --force  # Skip confirmation
     """
+    # Set theme if provided
+    if theme:
+        set_theme(theme)
+
     # Find quote by full or partial ID
     quotes = load_quotes()
 

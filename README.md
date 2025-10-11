@@ -1,95 +1,151 @@
 # Quotes Manager
 
-A beautiful CLI tool for saving, organizing, and reflecting on meaningful quotes with AI-powered insights.
+*A beautiful CLI tool for saving, organizing, and reflecting on meaningful quotes with AI-powered insights.*
 
-## Features
+**Current Version:** v1.3.1 | [Changelog](CHANGELOG.md)
 
-- 💾 **Save quotes** with rich context (source, personal notes, categories)
-- 🤖 **AI-powered** categorization, duplicate detection, and author identification
+---
+
+## What It Does
+
+- 💾 **Save & organize quotes** with rich context (source, notes, categories)
+- 🤖 **AI-powered intelligence** - automatic categorization, duplicate detection, and author identification
 - 📅 **Daily inspiration** - see a different quote each day (no repeats for 21 days)
 - 🔍 **Smart search** - find quotes by keyword, category, or author
-- 💡 **AI explanations** - get insights into what quotes mean on demand
+- 💡 **AI explanations** - get deep insights into what quotes mean
 - ✨ **Beautiful terminal** - formatted with Rich for an enjoyable experience
+
+---
+
+## Quick Start
+
+**Want to try it right now?**
+
+```bash
+# 1. Clone and install
+git clone <repo-url>
+cd quotes-manager
+pip install .
+
+# 2. Set up API key
+cp .env.example .env
+# Edit .env and add: ANTHROPIC_API_KEY=your-key-here
+
+# 3. Run
+quotes
+```
+
+**That's it!** See [Installation](#installation) for detailed setup.
+
+---
 
 ## Installation
 
-### Step 1: Clone and Install
+### Prerequisites
+
+Before installing, make sure you have:
+- **Python 3.9 or newer** ([Check version](https://www.python.org/downloads/): `python3 --version`)
+- **pip** (usually comes with Python)
+- **Anthropic API key** ([Get one here](https://console.anthropic.com/) - paid service)
+
+### Step 1: Clone the Repository
 
 ```bash
-# Clone the repository
 git clone <repo-url>
 cd quotes-manager
+```
 
-# Install the package
+### Step 2: Install Dependencies
+
+```bash
+# Install the package (includes all dependencies)
 pip install .
 ```
 
-### Step 2: Set Up PATH (Required)
+**What this does:** Installs Quotes Manager and all required packages (typer, rich, anthropic, etc.)
 
-After installation, you need to add Python's user bin directory to your PATH so the `quotes` command works from anywhere:
+### Step 3: Set Up PATH
+
+Add Python's bin directory to your PATH so `quotes` works from anywhere:
 
 ```bash
-# For macOS, add to ~/.zshrc or ~/.bash_profile:
-# Note: Replace 3.9 with your Python version if different
-export PATH="$HOME/Library/Python/3.9/bin:$PATH"
+# For macOS - add to ~/.zshrc or ~/.bash_profile:
+# Replace X.X with your Python version (check with: python3 --version)
+export PATH="$HOME/Library/Python/X.X/bin:$PATH"
 
-# For Linux, add to ~/.bashrc or ~/.zshrc:
+# Example for Python 3.11:
+export PATH="$HOME/Library/Python/3.11/bin:$PATH"
+
+# For Linux - add to ~/.bashrc or ~/.zshrc:
 export PATH="$HOME/.local/bin:$PATH"
 
-# Then reload your shell:
-source ~/.zshrc  # or source ~/.bashrc / source ~/.bash_profile
+# Then reload:
+source ~/.zshrc  # or source ~/.bashrc
 ```
 
-**To verify it works:**
+**Tip:** Find your Python version with `python3 --version`
+
+**Verify it works:**
 ```bash
 quotes --version
+# Should show: Quotes Manager v1.3.1
 ```
 
-You should see: `Quotes Manager v1.0.0-dev`
-
-### Step 3: Configure API Key
+### Step 4: Configure API Key
 
 ```bash
-# Copy the example environment file
+# Copy the example file
 cp .env.example .env
 
 # Edit .env and add your Anthropic API key:
 # ANTHROPIC_API_KEY=sk-ant-...
 ```
 
-You can get an API key from [Anthropic's Console](https://console.anthropic.com/).
+Get an API key from [Anthropic's Console](https://console.anthropic.com/).
 
-### Step 4: Set Up Shell Integration (Optional)
-
-For daily quotes to appear automatically when you open your terminal:
+### Step 5: Run Quotes Manager
 
 ```bash
-quotes setup
+# Launch interactive menu
+quotes
+
+# Or if you used requirements.txt only:
+python3 main.py
 ```
+
+**Expected result:** You should see a colorful interactive menu.
+
+### Troubleshooting Installation
+
+**"quotes: command not found"?**
+- Check PATH is set correctly (Step 3)
+- Or just run: `python3 main.py` from the quotes-manager directory
+
+**Python version too old?**
+- Install Python 3.9+ from [python.org](https://www.python.org/downloads/)
+- Check version: `python3 --version`
+
+**"No module named 'typer'" or similar?**
+- Install dependencies: `pip install .`
+- Make sure you're in the quotes-manager directory
+
+**API key not working?**
+- Check `.env` file has correct format: `ANTHROPIC_API_KEY=sk-ant-...`
+- No quotes around the key
+- No spaces around the `=`
 
 ---
 
-### For Developers
+## How to Use
 
-If you want to modify the code and see changes immediately, use editable mode:
-
-```bash
-pip install -e .
-```
-
-This creates a live link to your code, so any changes you make are reflected without reinstalling.
-
-## Quick Start
-
-### Launch the interactive menu (recommended)
+### Interactive Menu (Recommended)
 
 Simply run:
-
 ```bash
 quotes
 ```
 
-This opens a beautiful interactive menu where you can:
+You'll see an interactive menu:
 
 ```
 ╔════════════════════════════════════════════╗
@@ -104,82 +160,205 @@ This opens a beautiful interactive menu where you can:
   6 - Edit quote
   7 - Delete quote
   8 - Setup shell integration
-  9 - Exit
+  9 - Change theme
+  0 - Exit
 
-Choice [9]:
+Choice [0]:
 ```
 
 The menu is the easiest way to use Quotes Manager for daily tasks!
 
-### Using direct commands
+### Direct Commands
 
-You can also run commands directly (useful for scripting or quick actions):
+You can also run commands directly:
 
 ```bash
-# Add a new quote
+quotes add           # Add a new quote
+quotes daily         # See your daily quote
+quotes list          # List all quotes
+quotes search "work" # Search by keyword
+quotes view <id>     # View quote details
+quotes theme         # Change color theme
+```
+
+See all commands: `quotes --help`
+
+---
+
+## Common Tasks
+
+### Adding Your First Quote
+
+```bash
 quotes add
+```
 
-# See your daily quote
+The tool will guide you through:
+1. Enter the quote text
+2. Enter the author (or let AI identify them)
+3. Add source, personal notes (optional)
+4. AI suggests categories - select which ones fit
+5. AI checks for duplicates
+
+### Viewing Today's Quote
+
+```bash
 quotes daily
+```
 
+Shows a different quote each day. No repeats for 21 days!
+
+### Searching Your Quotes
+
+```bash
 # Search by keyword
-quotes search "passion work"
+quotes search "motivation"
 
-# List all quotes
-quotes list
-
-# Filter by category or author
+# Filter by category
 quotes list --category inspiration
-quotes list --author "Steve Jobs"
 
-# View quote details (with AI explanation option)
-quotes view <quote-id>
+# Filter by author
+quotes list --author "Maya Angelou"
+```
 
-# Set up shell integration for daily quotes
+### Getting Daily Quotes Automatically
+
+```bash
 quotes setup
 ```
 
-## Available Commands
+This adds a quote to your terminal startup (optional).
 
-All commands can be run directly or accessed through the interactive menu:
+### Changing Colors
 
-- `add` - Add a new quote with AI-powered categorization
-- `daily` - Show today's quote (no repeats for 21 days)
-- `list` - List all quotes (with optional filters)
-- `search` - Search quotes by keyword
-- `view` - View detailed information with AI explanation option
-- `edit` - Edit an existing quote
-- `delete` - Delete a quote
-- `setup` - Set up automatic daily quotes in your terminal
+```bash
+quotes theme
+```
+
+Choose from 5 themes: auto, dark, light, high-contrast, or none.
+
+---
 
 ## Requirements
 
 - Python 3.9+
-- Anthropic API key (for AI features)
+- Anthropic API key (paid service for AI features)
 
-## Data Storage
+**Optional:**
+- Shell profile for daily quote integration
 
-All your quotes are stored locally in `local_data/personal_data/quotes.json`. Your data never leaves your machine except for AI analysis via the Claude API.
+---
 
-## Development
+## Data Storage & Privacy
 
-Built with:
+- 🏠 **Your quotes stay local** in `local_data/personal_data/quotes.json`
+- 🔒 **API keys** stored in `.env` file (never committed to git)
+- ☁️ **AI analysis** sent to Claude API only when you add/explain quotes
+- 🚫 **No tracking** or telemetry
+- ✅ **Open source** - review all code yourself
+
+**Your private files:**
+- `local_data/` - Your quotes and data
+- `.env` - Your API key
+- Both are automatically excluded from git
+
+---
+
+## Usage & Forking
+
+This project is open source under MIT license. You're welcome to:
+- **Fork the repository** and customize for your own needs
+- **Report bugs** via GitHub issues
+- **Suggest improvements** in discussions
+
+*Note: This is a personal productivity system. While the code is open source, I keep contributions minimal to maintain system stability for personal use.*
+
+### For Developers (Forking/Customization)
+
+If you've forked this project and want to modify it, see:
+- **[DEVELOPMENT.md](DEVELOPMENT.md)** - Complete setup, tools, and workflow guide
+
+**Quick fork setup:**
+```bash
+git clone <your-fork-url>
+cd quotes-manager
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt  # Includes dev tools
+pre-commit install
+# See DEVELOPMENT.md for complete guide
+```
+
+### Built With
+
 - [Typer](https://typer.tiangolo.com/) - Modern CLI framework
 - [Rich](https://rich.readthedocs.io/) - Beautiful terminal formatting
 - [Claude API](https://docs.anthropic.com/) - AI-powered insights
 
-## Changelog
-
-See [CHANGELOG.md](CHANGELOG.md) for version history and changes.
-
-## License
-
-MIT License - See [LICENSE](LICENSE) for details
+---
 
 ## Support
 
-Found a bug or have a feature request? Please open an issue on GitHub.
+- 📖 **Questions?** Check the [Common Tasks](#common-tasks) section above
+- 🐛 **Found a bug?** Open an issue on GitHub
+- 💡 **Have an idea?** Start a discussion
+- 📚 **Forking/customizing?** See [DEVELOPMENT.md](DEVELOPMENT.md)
 
 ---
+
+## Advanced
+
+### Color Themes & Accessibility
+
+Quotes Manager supports 5 color themes:
+- **`auto`** (default) - Adapts to your terminal
+- **`dark`** - Bright colors for dark backgrounds
+- **`light`** - Darker colors for light backgrounds
+- **`high-contrast`** - Maximum contrast for accessibility
+- **`none`** - Plain text (screen readers)
+
+**Change theme:**
+```bash
+# Interactive selection
+quotes theme
+
+# Direct selection
+quotes theme dark
+
+# For one command
+quotes list --theme light
+
+# Permanently via config
+mkdir -p ~/.config/quotes-manager
+echo '[display]
+theme = "dark"' > ~/.config/quotes-manager/config.toml
+```
+
+**Priority order:** CLI flag > Environment variable > Config file > Default
+
+### All Available Commands
+
+```bash
+quotes add           # Add a new quote
+quotes daily         # Show today's quote
+quotes list          # List all quotes
+quotes search        # Search quotes
+quotes view          # View quote details
+quotes edit          # Edit a quote
+quotes delete        # Delete a quote
+quotes theme         # Change color theme
+quotes setup         # Setup shell integration
+quotes --help        # Show all options
+```
+
+---
+
+## License
+
+MIT License - See [LICENSE](LICENSE) for details.
+
+---
+
+**Version:** v1.3.1 | **Last updated:** 2025-10-12
 
 **Enjoy your daily dose of wisdom! 📖✨**

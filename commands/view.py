@@ -2,14 +2,14 @@
 
 import typer
 from rich.console import Console
-from rich.prompt import Prompt, Confirm
-from rich.panel import Panel
 from rich.markdown import Markdown
+from rich.panel import Panel
+from rich.prompt import Confirm, Prompt
 
-from utils.storage import get_quote_by_id, update_quote, load_quotes
-from utils.display import display_quote_detailed, display_error
 from ai.claude_client import is_api_available
 from ai.explainer import explain_quote
+from utils.display import display_error, display_quote_detailed, set_theme
+from utils.storage import get_quote_by_id, load_quotes, update_quote
 
 console = Console()
 
@@ -18,6 +18,9 @@ def view_quote(
     quote_id: str = typer.Argument(..., help="Quote ID to view (full or partial)"),
     explain: bool = typer.Option(
         False, "--explain", "-e", help="Show AI explanation immediately"
+    ),
+    theme: str = typer.Option(
+        None, "--theme", help="Color theme: auto, dark, light, high-contrast, none"
     ),
 ):
     """
@@ -30,6 +33,10 @@ def view_quote(
         quotes view a1b2c3d4
         quotes view a1b2 --explain    # Show with AI explanation
     """
+    # Set theme if provided
+    if theme:
+        set_theme(theme)
+
     # Find quote by full or partial ID
     quotes = load_quotes()
 

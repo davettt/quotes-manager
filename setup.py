@@ -1,7 +1,8 @@
 """Setup configuration for Quotes Manager."""
 
-from setuptools import setup, find_packages
-from version import __version__, __author__, __description__
+from setuptools import find_packages, setup
+
+from version import __author__, __description__, __version__
 
 # Read requirements from requirements.txt
 with open("requirements.txt", "r", encoding="utf-8") as f:

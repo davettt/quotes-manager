@@ -7,7 +7,92 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Added - V1.0 Complete (2025-10-06)
+## [1.3.1] - 2025-10-11
+
+### Changed
+- Clarified project philosophy in README: personal productivity system with open-source code
+- Updated "Development" section to "Usage & Forking" to better reflect contribution policy
+- Explicitly state that contributions are kept minimal to maintain stability
+- Guide forkers to development documentation for customization
+
+### Documentation
+- No functionality changes, documentation clarity only
+
+## [1.3.0] - 2025-10-11
+
+### Added
+- **Development tooling infrastructure**:
+  - `pyproject.toml`: Centralized configuration for Black, Ruff, Bandit
+  - `.pre-commit-config.yaml`: Automatic git hooks for code quality
+  - `bandit` security scanner for vulnerability detection
+  - `DEVELOPMENT.md`: Complete development setup and workflow guide
+- **Pre-commit hooks** run automatically before commits:
+  - Code formatting (Black)
+  - Linting (Ruff with auto-fix)
+  - Security scanning (Bandit)
+  - File validation (whitespace, YAML, JSON, TOML)
+  - Private key detection
+  - Python AST validation
+
+### Changed
+- Centralized all tool configurations in `pyproject.toml`
+- Updated `.claude/workflow/code_standards.md` with pre-commit workflow
+- Updated `.claude/README.md` with new tooling references
+- Updated `requirements.txt` with bandit and pre-commit
+
+### Developer Notes
+- **Setup:** Run `pre-commit install` to enable automatic checks
+- **Manual run:** Use `pre-commit run --all-files`
+- **Documentation:** See `DEVELOPMENT.md` for complete guide
+- **Standards:** See `.claude/workflow/code_standards.md` for workflow
+
+## [1.2.0] - 2025-10-11
+
+### Added
+- **Theme selection in interactive menu**: Option 9 now allows changing themes without exiting menu
+- **`quotes theme` command**: Select theme interactively or directly (e.g., `quotes theme dark`)
+- **Theme preview**: Shows color samples when changing theme
+- **Current theme indicator**: Menu shows which theme is currently active with ✓ mark
+
+### Changed
+- Interactive menu now has 9 options instead of 8
+- Theme changes persist for entire menu session
+
+### Fixed
+- **Critical: Typer default parameter bug**: Fixed issue where Typer OptionInfo objects were being used as default values when commands were called directly from menu instead of CLI
+- Added explicit `theme=None` to all command calls in menu to prevent Typer object corruption
+- **Dynamic theme switching**: `get_color()` now imports module and accesses attribute to get current THEME value
+- Fixed Python import caching issue by using `import utils.display` then `utils.display.THEME` instead of `from utils.display import THEME`
+- Theme changes now properly apply across all display functions in real-time
+- Removed `THEME` parameter from all `get_color()` calls throughout codebase
+- **Menu now respects themes**: Updated menu display, prompts, and all UI elements to use theme colors instead of hardcoded values
+- Menu colors (title, borders, prompts) now change based on selected theme
+
+## [1.1.0] - 2025-10-11
+
+### Added
+- **Accessible Color Theme System**: Choose from 5 color themes for different terminal setups
+  - `auto` (default): Adapts to your terminal using Rich's smart colors
+  - `dark`: Optimized for dark backgrounds with bright colors
+  - `light`: Optimized for light backgrounds with darker colors
+  - `high-contrast`: Maximum contrast for accessibility needs
+  - `none`: Plain text with no colors
+- **Theme Configuration**: Set theme via CLI flag (`--theme`), environment variable (`QUOTES_THEME`), or config file (`~/.config/quotes-manager/config.toml`)
+- **New Theme Module** (`utils/themes.py`): Centralized theme management system
+
+### Changed
+- All color definitions now use theme system instead of hardcoded values
+- Default colors now use Rich's adaptive colors for better cross-terminal compatibility
+- Display functions updated to support dynamic theme switching
+
+### Fixed
+- Dark blue colors on black backgrounds now visible with adaptive colors
+- Dim gray text now has better contrast on dark backgrounds
+- Colors now work properly on both dark and light terminal backgrounds
+
+## [1.0.0] - 2025-10-06
+
+### Added - V1.0 Complete
 
 **Phase 4: Daily Quote & Shell Integration**
 - **Daily Quote Command** (`commands/daily.py`)
