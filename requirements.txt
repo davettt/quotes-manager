@@ -5,6 +5,7 @@ requests==2.31.0
 python-dotenv==1.0.1
 python-dateutil==2.9.0
 tomli>=2.0.0  # For Python < 3.11 config file support
+prompt_toolkit>=3.0.36  # Full multiline editing with arrow keys
 
 # Development dependencies
 black==24.4.2

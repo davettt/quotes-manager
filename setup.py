@@ -26,7 +26,7 @@ setup(
     description=__description__,
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/yourusername/quotes-manager",  # Update with actual repo URL
+    url="https://github.com/davettt/quotes-manager",
     packages=find_packages(exclude=["tests", "*.tests", "*.tests.*", "tests.*"]),
     include_package_data=True,
     install_requires=requirements,

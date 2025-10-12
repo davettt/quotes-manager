@@ -7,6 +7,42 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.5.0] - 2025-10-12
+
+### Added
+- **Full multiline editing with prompt_toolkit**: Arrow key support (↑↓←→) to navigate anywhere in multi-line input
+- Keyboard shortcuts for finishing input: Ctrl+D or Esc+Enter
+- Automatic fallback to sentinel mode (END) when prompt_toolkit unavailable
+- MIT LICENSE file added to repository
+
+### Changed
+- Editor flag (--editor) is now optional, not default
+- Edit command now properly supports multiline editing with full cursor movement
+- Improved input experience with helpful on-screen instructions
+- Updated GitHub repository URL in setup.py
+
+### Fixed
+- Edit command now works correctly with multiline quote editing
+- Better error handling when prompt_toolkit is unavailable
+
+## [1.4.1] - 2025-10-12
+
+### Added
+- --editor flag for quotes add to open $EDITOR (fallback to nano)
+- QUOTES_USE_EDITOR=1 env var to make editor the default input method
+
+### Improved
+- Better multi-line input UX using editor; sanitization and paste cleanup still apply after save
+
+## [1.4.0] - 2025-10-12
+
+### Added
+- Multi-line quote input for add command using END sentinel to finish input
+- Input sanitization for text, author, source, and personal note (normalize newlines, remove control chars, strip trailing whitespace)
+
+### Changed
+- Interactive add prompt now shows clear instructions for multi-line input
+
 ## [1.3.1] - 2025-10-11
 
 ### Changed

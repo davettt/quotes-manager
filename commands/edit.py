@@ -1,9 +1,16 @@
 """Edit quote command implementation."""
 
+import os
+
+# Import the multiline input function from add.py
+import sys
+
 import typer
 from rich.console import Console
 from rich.prompt import Prompt
 
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
+from commands.add import _read_multiline_input, _sanitize_text
 from utils.display import (
     display_error,
     display_quote_detailed,
@@ -81,10 +88,12 @@ def edit_quote(
 
     # Edit based on choice
     if choice == "t":
-        console.print(f"\n[dim]Current text:[/dim] {quote.text}")
-        new_text = Prompt.ask("New text (or press Enter to keep current)")
+        console.print("\n[dim]Current text:[/dim]")
+        console.print(f"{quote.text}\n")
+        console.print("[cyan]Enter new text (use arrow keys to navigate):[/cyan]")
+        new_text = _read_multiline_input("New quote text", sentinel="END")
         if new_text.strip():
-            quote.text = new_text.strip()
+            quote.text = _sanitize_text(new_text).strip()
 
     elif choice == "a":
         console.print(f"\n[dim]Current author:[/dim] {quote.author}")

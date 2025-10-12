@@ -46,6 +46,7 @@ class Quote:
     categories: List[str] = field(default_factory=list)
     id: str = field(default_factory=lambda: str(uuid.uuid4()))
     date_added: str = field(default_factory=lambda: datetime.utcnow().isoformat())
+    date_modified: Optional[str] = None
     last_shown: Optional[str] = None
     times_shown: int = 0
     ai_metadata: AIMetadata = field(default_factory=AIMetadata)
@@ -60,6 +61,7 @@ class Quote:
             "personal_note": self.personal_note,
             "categories": self.categories,
             "date_added": self.date_added,
+            "date_modified": self.date_modified,
             "last_shown": self.last_shown,
             "times_shown": self.times_shown,
             "ai_metadata": self.ai_metadata.to_dict(),
@@ -77,6 +79,7 @@ class Quote:
             personal_note=data.get("personal_note", ""),
             categories=data.get("categories", []),
             date_added=data.get("date_added", datetime.utcnow().isoformat()),
+            date_modified=data.get("date_modified"),
             last_shown=data.get("last_shown"),
             times_shown=data.get("times_shown", 0),
             ai_metadata=ai_metadata,

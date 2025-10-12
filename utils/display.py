@@ -106,6 +106,10 @@ def display_quote_detailed(quote: Quote) -> None:
     details.append("\n\nAdded: ", style=f"bold {get_color('secondary')}")
     details.append(format_date(quote.date_added))
 
+    if quote.date_modified:
+        details.append("\nLast modified: ", style=f"bold {get_color('secondary')}")
+        details.append(format_date(quote.date_modified))
+
     if quote.last_shown:
         details.append("\nLast shown: ", style=f"bold {get_color('secondary')}")
         details.append(format_relative_time(quote.last_shown))

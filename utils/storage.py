@@ -231,6 +231,8 @@ def update_quote(updated_quote: Quote) -> bool:
     quotes = load_quotes()
     for i, quote in enumerate(quotes):
         if quote.id == updated_quote.id:
+            # Update the modified timestamp
+            updated_quote.date_modified = datetime.utcnow().isoformat()
             quotes[i] = updated_quote
             save_quotes(quotes)
             return True

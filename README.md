@@ -2,7 +2,7 @@
 
 *A beautiful CLI tool for saving, organizing, and reflecting on meaningful quotes with AI-powered insights.*
 
-**Current Version:** v1.3.1 | [Changelog](CHANGELOG.md)
+**Current Version:** v1.5.0 | [Changelog](CHANGELOG.md)
 
 ---
 
@@ -88,7 +88,7 @@ source ~/.zshrc  # or source ~/.bashrc
 **Verify it works:**
 ```bash
 quotes --version
-# Should show: Quotes Manager v1.3.1
+# Should show: Quotes Manager v1.5.0
 ```
 
 ### Step 4: Configure API Key
@@ -193,8 +193,51 @@ See all commands: `quotes --help`
 quotes add
 ```
 
+**Default: Terminal with full arrow key support**
+- By default, you get a rich multiline editor right in your terminal
+- Use arrow keys (↑↓←→) to navigate anywhere in your text
+- Ctrl+D or Esc+Enter to finish
+- Auto-cleans pasted content (removes borders, ANSI codes, etc.)
+- Requires `prompt_toolkit` (included in requirements.txt)
+
+**Alternative: Use your external editor**
+- For longer quotes, use your preferred editor
+- Run with the flag:
+  ```bash path=null start=null
+  quotes add --editor
+  ```
+- Set your editor:
+  ```bash path=null start=null
+  export EDITOR="code -w"   # VS Code
+  export EDITOR="nano"       # Nano (default)
+  export EDITOR="vim"        # Vim
+  ```
+- Make it default:
+  ```bash path=null start=null
+  export QUOTES_USE_EDITOR=1
+  ```
+
+**Fallback: Simple mode**
+- If prompt_toolkit isn't available, falls back to sentinel mode
+- Type your text, then type END on its own line to finish
+
+Example:
+```text path=null start=null
+Quote text (multi-line supported)
+Paste or type your text. When finished, type END on its own line and press Enter.
+
+│  Your pasted quote line 1
+│  Your pasted quote line 2
+END
+```
+Saved text becomes:
+```text path=null start=null
+Your pasted quote line 1
+Your pasted quote line 2
+```
+
 The tool will guide you through:
-1. Enter the quote text
+1. Enter the quote text (multi-line; finish with END)
 2. Enter the author (or let AI identify them)
 3. Add source, personal notes (optional)
 4. AI suggests categories - select which ones fit
@@ -359,6 +402,6 @@ MIT License - See [LICENSE](LICENSE) for details.
 
 ---
 
-**Version:** v1.3.1 | **Last updated:** 2025-10-12
+**Version:** v1.5.0 | **Last updated:** 2025-10-12
 
 **Enjoy your daily dose of wisdom! 📖✨**
