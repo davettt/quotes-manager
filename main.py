@@ -83,6 +83,7 @@ def run_interactive_menu():
                 console.clear()
                 add_quote(
                     text=None,
+                    editor=False,
                     author=None,
                     source=None,
                     note=None,
