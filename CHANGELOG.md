@@ -7,6 +7,34 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.5.2] - 2025-10-22
+
+### Fixed
+- **Critical: Missing `.venv` on fresh clone** - Virtual environment folder wasn't being created when cloning the project. Updated documentation to include fresh clone setup instructions
+- **Typer boolean flag parsing bug** - The `--quiet` and `--force` flags in the `quotes daily` command weren't being recognized properly. Added workaround to manually check `sys.argv` for flag presence since Typer 0.12.3 has issues with boolean option parsing
+- **Shell integration documentation** - Clarified the full path approach for shell integration vs venv activation
+
+### Changed
+- Enhanced README.md troubleshooting section with dedicated fresh clone scenario
+- Improved `quotes setup` documentation to explain the command and full path approach
+- Updated VENV_MIGRATION_GUIDE.md with fresh clone best practices and shell integration patterns
+
+## [1.5.1] - 2025-10-16
+
+### Added
+- **Web search fallback for author identification**: When Claude's knowledge is uncertain (<70% confidence), the system now attempts to find author information via DuckDuckGo web search
+- **Configuration option**: New `enable_web_search_author` setting in preferences to enable/disable web search for author lookup (enabled by default)
+- **Enhanced author identification workflow**: Two-tier approach - tries Claude first, then web search if needed
+- **BeautifulSoup4 dependency**: For parsing web search results
+
+### Changed
+- Author identification now uses `identify_author_enhanced()` which provides improved success rate (~70-80% vs ~30% previously)
+- Updated add command to use enhanced author identification with visual feedback for web search attempts
+- Improved handling of obscure and recent quotes
+
+### Fixed
+- Previously marked unknown quotes immediately as Anonymous without attempting web search
+
 ## [1.5.0] - 2025-10-12
 
 ### Added

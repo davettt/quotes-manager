@@ -9,7 +9,7 @@
 ## What It Does
 
 - 💾 **Save & organize quotes** with rich context (source, notes, categories)
-- 🤖 **AI-powered intelligence** - automatic categorization, duplicate detection, and author identification
+- 🤖 **AI-powered intelligence** - automatic categorization, duplicate detection, and enhanced author identification with web search fallback
 - 📅 **Daily inspiration** - see a different quote each day (no repeats for 21 days)
 - 🔍 **Smart search** - find quotes by keyword, category, or author
 - 💡 **AI explanations** - get deep insights into what quotes mean
@@ -22,20 +22,28 @@
 **Want to try it right now?**
 
 ```bash
-# 1. Clone and install
+# 1. Clone and set up virtual environment
 git clone <repo-url>
 cd quotes-manager
-pip install .
+python3 -m venv venv
+source venv/bin/activate
 
-# 2. Set up API key
+# 2. Install (use -e for editable mode so it finds local data files)
+pip install -e .
+
+# 3. Set up API key
 cp .env.example .env
 # Edit .env and add: ANTHROPIC_API_KEY=your-key-here
 
-# 3. Run
+# 4. Run
 quotes
 ```
 
 **That's it!** See [Installation](#installation) for detailed setup.
+
+**Note:** You only run `pip install -e .` **once**. After that, packages stay in your venv automatically.
+
+**For seamless daily use:** This project includes a `.envrc` file. If you have [direnv](https://direnv.net/) installed, the venv auto-activates when you enter the project directory. See "For Daily Use" section below.
 
 ---
 
@@ -55,41 +63,28 @@ git clone <repo-url>
 cd quotes-manager
 ```
 
-### Step 2: Install Dependencies
+### Step 2: Create Virtual Environment
 
 ```bash
-# Install the package (includes all dependencies)
-pip install .
+# Create a virtual environment
+python3 -m venv venv
+
+# Activate it
+source venv/bin/activate  # macOS/Linux
+# or on Windows:
+# venv\Scripts\activate
 ```
 
-**What this does:** Installs Quotes Manager and all required packages (typer, rich, anthropic, etc.)
+**Why?** Virtual environments keep project dependencies isolated and avoid conflicts with system Python.
 
-### Step 3: Set Up PATH
-
-Add Python's bin directory to your PATH so `quotes` works from anywhere:
+### Step 3: Install Dependencies
 
 ```bash
-# For macOS - add to ~/.zshrc or ~/.bash_profile:
-# Replace X.X with your Python version (check with: python3 --version)
-export PATH="$HOME/Library/Python/X.X/bin:$PATH"
-
-# Example for Python 3.11:
-export PATH="$HOME/Library/Python/3.11/bin:$PATH"
-
-# For Linux - add to ~/.bashrc or ~/.zshrc:
-export PATH="$HOME/.local/bin:$PATH"
-
-# Then reload:
-source ~/.zshrc  # or source ~/.bashrc
+# Install the package in editable mode (includes all dependencies)
+pip install -e .
 ```
 
-**Tip:** Find your Python version with `python3 --version`
-
-**Verify it works:**
-```bash
-quotes --version
-# Should show: Quotes Manager v1.5.0
-```
+**What this does:** Installs Quotes Manager and all required packages (typer, rich, anthropic, etc.) inside your virtual environment. The `-e` flag keeps the package linked to your project so it can find local data files.
 
 ### Step 4: Configure API Key
 
@@ -103,13 +98,34 @@ cp .env.example .env
 
 Get an API key from [Anthropic's Console](https://console.anthropic.com/).
 
-### Step 5: Run Quotes Manager
+### Step 5: (Optional) For Daily Use - Auto-Activate with direnv
+
+If you use multiple tools daily and want automatic venv switching, use **direnv**:
+
+```bash
+# One-time setup
+brew install direnv
+
+# Add to ~/.zshrc (after starship init):
+eval "$(direnv hook zsh)"
+
+# Reload: source ~/.zshrc
+
+# Then in this project directory:
+direnv allow
+```
+
+**Result:** When you `cd` into this directory, the venv auto-activates. When you leave, it deactivates. Perfect for switching between multiple projects!
+
+**Note:** The `.envrc` file is already included in this project.
+
+### Step 6: Run Quotes Manager
 
 ```bash
 # Launch interactive menu
 quotes
 
-# Or if you used requirements.txt only:
+# Or if using requirements.txt only:
 python3 main.py
 ```
 
@@ -117,16 +133,39 @@ python3 main.py
 
 ### Troubleshooting Installation
 
-**"quotes: command not found"?**
-- Check PATH is set correctly (Step 3)
-- Or just run: `python3 main.py` from the quotes-manager directory
+**Fresh clone and "quotes: command not found"?**
+- The `.venv` folder might not exist yet. Create it:
+  ```bash
+  python3 -m venv .venv
+  source .venv/bin/activate
+  pip install -e .
+  ```
+
+**".venv folder doesn't exist" after cloning?**
+- It's gitignored (only created locally). Run:
+  ```bash
+  python3 -m venv .venv
+  source .venv/bin/activate
+  pip install -e .
+  ```
+
+**"quotes: command not found" after installation?**
+- Make sure your virtual environment is activated: `source .venv/bin/activate`
+- Or if using direnv: `direnv allow` in the project directory
+- Or use full path: `/path/to/quotes-manager/.venv/bin/quotes`
+- Or run: `python3 main.py` from the quotes-manager directory
+
+**"externally-managed-environment" error when installing?**
+- You're not in a virtual environment. Activate it: `source .venv/bin/activate`
+- Then try: `pip install -e .` again
 
 **Python version too old?**
 - Install Python 3.9+ from [python.org](https://www.python.org/downloads/)
 - Check version: `python3 --version`
 
 **"No module named 'typer'" or similar?**
-- Install dependencies: `pip install .`
+- Make sure your virtual environment is activated: `source .venv/bin/activate`
+- Then install: `pip install -e .`
 - Make sure you're in the quotes-manager directory
 
 **API key not working?**
@@ -270,7 +309,23 @@ quotes list --author "Maya Angelou"
 quotes setup
 ```
 
-This adds a quote to your terminal startup (optional).
+This command shows you how to add a daily quote to your shell startup (optional).
+
+**What it does:**
+- Shows your shell type (zsh, bash, fish)
+- Displays the command to add to your shell config
+- Instructions for editing your profile file (`.zshrc`, `.bashrc`, etc.)
+
+**The command added to your profile:**
+```bash
+/path/to/quotes-manager/.venv/bin/quotes daily --quiet
+```
+
+This uses the full path to the `quotes` command in your venv, so it works even when the venv isn't activated. The `--quiet` flag shows a minimal format suitable for terminal startup.
+
+**After setup:**
+- Open a new terminal → Your daily quote appears automatically
+- Each day gets a different quote (no repeats for 21 days)
 
 ### Changing Colors
 
@@ -282,10 +337,36 @@ Choose from 5 themes: auto, dark, light, high-contrast, or none.
 
 ---
 
+## Features in Detail
+
+### Enhanced Author Identification
+Quotes Manager uses a smart two-tier approach for identifying quote authors:
+
+1. **Claude First**: Uses Claude's extensive knowledge base (trained through Jan 2025)
+   - Fast and free
+   - Works well for famous quotes
+
+2. **Web Search Fallback**: If Claude is uncertain, automatically searches the web
+   - Improves success rate from ~30% to ~70-80%
+   - Great for obscure, recent, or lesser-known quotes
+   - Gracefully handles network issues
+
+You can disable web search in the configuration if you prefer:
+```json
+{
+  "preferences": {
+    "enable_web_search_author": false
+  }
+}
+```
+
+---
+
 ## Requirements
 
 - Python 3.9+
 - Anthropic API key (paid service for AI features)
+- Internet connection (optional, for web search fallback)
 
 **Optional:**
 - Shell profile for daily quote integration

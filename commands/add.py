@@ -13,7 +13,7 @@ from rich.console import Console
 from rich.panel import Panel
 from rich.prompt import Prompt
 
-from ai.author_identifier import identify_author
+from ai.author_identifier import identify_author_enhanced
 from ai.categorizer import suggest_categories
 from ai.claude_client import is_api_available
 from ai.duplicate_detector import check_duplicates, get_similarity_level
@@ -335,7 +335,7 @@ def add_quote(
                 # 1. Author identification (if not provided)
                 if not author_input or author_input.strip() == "":
                     try:
-                        author_result = identify_author(text.strip())
+                        author_result = identify_author_enhanced(text.strip())
                         author = author_result["author"]
                         ai_metadata.author_confidence = author_result["confidence"]
                     except Exception as e:
@@ -500,7 +500,7 @@ def add_quote(
         # In non-interactive mode, still do AI author lookup if no author provided
         if ai_available and author == "Anonymous":
             try:
-                author_result = identify_author(text.strip())
+                author_result = identify_author_enhanced(text.strip())
                 if author_result["author"] != "Anonymous":
                     author = author_result["author"]
                     ai_metadata.author_confidence = author_result["confidence"]

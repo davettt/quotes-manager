@@ -1,6 +1,7 @@
 """Daily quote command implementation."""
 
 import random
+import sys
 from datetime import datetime
 from typing import Optional
 
@@ -39,18 +40,22 @@ def get_daily_quote(force: bool = False) -> Optional[Quote]:
 
     # Check if we've already shown a quote today
     last_display = get_last_daily_display()
-    if last_display and not force:
-        last_display_date = datetime.fromisoformat(last_display).date()
-        today = datetime.utcnow().date()
 
-        if last_display_date == today:
-            # Already shown today, find and return that quote
-            display_history = get_display_history()
-            if display_history:
-                last_quote_id = display_history[-1]["quote_id"]
-                for quote in quotes:
-                    if quote.id == last_quote_id:
-                        return quote
+    if last_display and not force:
+        try:
+            last_display_date = datetime.fromisoformat(last_display).date()
+            today = datetime.now().date()  # Use local time, not UTC
+
+            if last_display_date == today:
+                # Already shown today, find and return that quote
+                display_history = get_display_history()
+                if display_history:
+                    last_quote_id = display_history[-1]["quote_id"]
+                    for quote in quotes:
+                        if quote.id == last_quote_id:
+                            return quote
+        except Exception:
+            pass
 
     # Get display history for last 21 days
     display_history = get_display_history()
@@ -97,6 +102,27 @@ def show_daily(
     Shows a different quote each day, with no repeats within 21 days.
     Use --quiet for a minimal display suitable for shell startup.
     """
+    # Handle Typer boolean flag parsing
+    # Typer converts False to string 'False' for boolean options
+    # Check if it's a string and convert it, or if it's None, check sys.argv
+    if isinstance(quiet, str):
+        quiet = (
+            quiet.lower() in ("true", "1", "yes")
+            or "--quiet" in sys.argv
+            or "-q" in sys.argv
+        )
+    elif quiet is None:
+        quiet = "--quiet" in sys.argv or "-q" in sys.argv
+
+    if isinstance(force, str):
+        force = (
+            force.lower() in ("true", "1", "yes")
+            or "--force" in sys.argv
+            or "-f" in sys.argv
+        )
+    elif force is None:
+        force = "--force" in sys.argv or "-f" in sys.argv
+
     # Set theme if provided
     if theme:
         set_theme(theme)

@@ -134,7 +134,7 @@ def run_interactive_menu():
                     f"[{prompt_style}]Enter quote ID[/{prompt_style}]"
                 )
                 if quote_id:
-                    view_quote(quote_id=quote_id, theme=None)
+                    view_quote(quote_id=quote_id, explain=False, theme=None)
                 dim_style = get_color("dim")
                 Prompt.ask(
                     f"\n[{dim_style}]Press Enter to continue[/{dim_style}]", default=""

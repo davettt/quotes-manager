@@ -42,6 +42,7 @@ class Preferences:
     shell_integration: bool = False
     show_quote_id: bool = False
     display_style: str = "boxed"
+    enable_web_search_author: bool = True
 
     def to_dict(self) -> Dict:
         """Convert to dictionary for JSON serialization."""
@@ -51,6 +52,7 @@ class Preferences:
             "shell_integration": self.shell_integration,
             "show_quote_id": self.show_quote_id,
             "display_style": self.display_style,
+            "enable_web_search_author": self.enable_web_search_author,
         }
 
     @classmethod
@@ -62,6 +64,7 @@ class Preferences:
             shell_integration=data.get("shell_integration", False),
             show_quote_id=data.get("show_quote_id", False),
             display_style=data.get("display_style", "boxed"),
+            enable_web_search_author=data.get("enable_web_search_author", True),
         )
 
 

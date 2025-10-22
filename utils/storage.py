@@ -132,7 +132,7 @@ def add_to_display_history(quote_id: str) -> None:
         data["display_history"] = []
 
     data["display_history"].append(
-        {"quote_id": quote_id, "shown_at": datetime.utcnow().isoformat()}
+        {"quote_id": quote_id, "shown_at": datetime.now().isoformat()}
     )
 
     # Keep only last 21 days of history (approximate with 21 entries)
@@ -140,7 +140,7 @@ def add_to_display_history(quote_id: str) -> None:
         data["display_history"] = data["display_history"][-21:]
 
     # Update last daily display
-    data["last_daily_display"] = datetime.utcnow().isoformat()
+    data["last_daily_display"] = datetime.now().isoformat()
 
     # Write back
     with open(QUOTES_FILE, "w", encoding="utf-8") as f:

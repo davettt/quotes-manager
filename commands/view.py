@@ -106,51 +106,90 @@ def show_explanation(quote):
 
 def show_interactive_options(quote):
     """Show interactive options for viewing a quote."""
+    # Import here to avoid circular imports
+    from commands.delete import delete_quote_command
+    from commands.edit import edit_quote
+
     # Check if AI is available
     ai_available = is_api_available()
 
-    # Build options
-    options_text = "\n".join(
-        [
-            (
-                "  [yellow]e[/yellow] - Explain this quote (AI)"
-                if ai_available
-                else "  [dim]e - Explain (AI unavailable)[/dim]"
-            ),
-            "  [yellow]q[/yellow] - Back to menu",
-        ]
-    )
+    while True:
+        # Build options
+        options_text = "\n".join(
+            [
+                (
+                    "  [yellow]e[/yellow] - Explain this quote (AI)"
+                    if ai_available
+                    else "  [dim]e - Explain (AI unavailable)[/dim]"
+                ),
+                "  [yellow]ed[/yellow] - Edit this quote",
+                "  [yellow]d[/yellow] - Delete this quote",
+                "  [yellow]b[/yellow] - Back to menu",
+            ]
+        )
 
-    console.print(f"{options_text}\n")
+        console.print(f"{options_text}\n")
 
-    choices = ["e", "q"] if ai_available else ["q"]
-    choice = Prompt.ask("Choice", choices=choices, default="q")
+        choices = ["e", "ed", "d", "b"] if ai_available else ["ed", "d", "b"]
+        choice = Prompt.ask("Choice", choices=choices, default="b")
 
-    if choice == "e" and ai_available:
-        explanation = show_explanation(quote)
+        if choice == "b":
+            # Return to menu
+            return
 
-        # Ask if they want to save the explanation
-        if explanation:
+        elif choice == "e" and ai_available:
+            explanation = show_explanation(quote)
+
+            # Ask if they want to save the explanation
+            if explanation:
+                console.print()
+                if Confirm.ask(
+                    "Would you like to save this explanation to the quote's notes?",
+                    default=False,
+                ):
+                    # Get current note
+                    current_note = quote.personal_note
+
+                    # Append explanation
+                    if current_note:
+                        quote.personal_note = (
+                            f"{current_note}\n\nAI Explanation:\n{explanation}"
+                        )
+                    else:
+                        quote.personal_note = f"AI Explanation:\n{explanation}"
+
+                    # Save
+                    update_quote(quote)
+                    console.print("\n[green]✓ Explanation saved to quote notes[/green]")
+
+                # Continue to show options again
+                console.print()
+
+        elif choice == "ed":
+            # Edit the quote
             console.print()
-            if Confirm.ask(
-                "Would you like to save this explanation to the quote's notes?",
-                default=False,
-            ):
-                # Get current note
-                current_note = quote.personal_note
+            try:
+                edit_quote(quote_id=quote.id, theme=None)
+                # After editing, reload the quote to show updated details
+                from utils.storage import get_quote_by_id
 
-                # Append explanation
-                if current_note:
-                    quote.personal_note = (
-                        f"{current_note}\n\nAI Explanation:\n{explanation}"
-                    )
-                else:
-                    quote.personal_note = f"AI Explanation:\n{explanation}"
+                updated_quote = get_quote_by_id(quote.id)
+                if updated_quote:
+                    quote = updated_quote
+                    console.print()
+                    display_quote_detailed(quote)
+                    console.print()
+            except Exception:
+                # If edit was cancelled or failed, continue
+                console.print()
 
-                # Save
-                update_quote(quote)
-                console.print("\n[green]✓ Explanation saved to quote notes[/green]")
-
-            # Show options again
+        elif choice == "d":
+            # Delete the quote
             console.print()
-            show_interactive_options(quote)
+            try:
+                delete_quote_command(quote_id=quote.id, force=False, theme=None)
+                # If deletion succeeded, exit the function (return to menu)
+                return
+            except Exception:
+                # If deletion was cancelled or failed, continue
+                console.print()
