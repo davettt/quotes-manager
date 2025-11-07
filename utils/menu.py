@@ -2,10 +2,10 @@
 
 from rich.console import Console
 from rich.panel import Panel
-from rich.prompt import Prompt
 from rich.table import Table
 from rich.text import Text
 
+from utils.input_helpers import prompt_choice, prompt_continue
 from utils.themes import get_color
 
 console = Console()
@@ -62,8 +62,8 @@ def get_menu_choice() -> str:
         Selected menu option as string
     """
     prompt_style = f"bold {get_color('warning')}"
-    choice = Prompt.ask(
-        f"[{prompt_style}]Select an option[/{prompt_style}]",
+    choice = prompt_choice(
+        f"[{prompt_style}]Select an option:[/{prompt_style}] ",
         choices=["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"],
         default="0",
     )
@@ -81,7 +81,7 @@ def show_menu_message(message: str, style: str = "green") -> None:
     console.print()
     console.print(f"[{style}]{message}[/{style}]")
     console.print()
-    Prompt.ask("[dim]Press Enter to continue[/dim]", default="")
+    prompt_continue("[dim]Press Enter to continue[/dim]")
 
 
 def confirm_action(message: str) -> bool:

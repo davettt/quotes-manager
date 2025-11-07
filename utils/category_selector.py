@@ -4,8 +4,9 @@ from typing import List
 
 from rich.console import Console
 from rich.panel import Panel
-from rich.prompt import Prompt
 from rich.table import Table
+
+from utils.input_helpers import prompt_continue, prompt_input
 
 console = Console()
 
@@ -87,7 +88,7 @@ def select_categories(
         console.print(
             "\n[yellow]Options:[/yellow] Enter number to toggle | [cyan]c[/cyan] = add custom | [cyan]d[/cyan] = done | [cyan]x[/cyan] = cancel"
         )
-        choice = Prompt.ask("Choice", default="d").lower().strip()
+        choice = prompt_input("Choice: ", default="d").lower().strip()
 
         if choice == "d":
             # Done selecting
@@ -99,7 +100,7 @@ def select_categories(
 
         elif choice == "c":
             # Add custom category
-            custom = Prompt.ask("\n[cyan]Enter custom category name[/cyan]")
+            custom = prompt_input("\n[cyan]Enter custom category name:[/cyan] ")
             if custom.strip():
                 custom = custom.strip().lower()
                 if (
@@ -113,7 +114,7 @@ def select_categories(
                     console.print(
                         f"[yellow]Category '{custom}' already exists[/yellow]"
                     )
-                Prompt.ask("[dim]Press Enter to continue[/dim]", default="")
+                prompt_continue("[dim]Press Enter to continue[/dim]")
 
         elif choice.isdigit():
             # Toggle category

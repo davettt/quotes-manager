@@ -2,7 +2,7 @@
 
 *A beautiful CLI tool for saving, organizing, and reflecting on meaningful quotes with AI-powered insights.*
 
-**Current Version:** v1.5.0 | [Changelog](CHANGELOG.md)
+**Current Version:** v1.5.3 | [Changelog](CHANGELOG.md)
 
 ---
 

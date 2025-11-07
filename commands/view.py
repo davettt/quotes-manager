@@ -4,11 +4,12 @@ import typer
 from rich.console import Console
 from rich.markdown import Markdown
 from rich.panel import Panel
-from rich.prompt import Confirm, Prompt
+from rich.prompt import Confirm
 
 from ai.claude_client import is_api_available
 from ai.explainer import explain_quote
 from utils.display import display_error, display_quote_detailed, set_theme
+from utils.input_helpers import prompt_choice
 from utils.storage import get_quote_by_id, load_quotes, update_quote
 
 console = Console()
@@ -131,7 +132,7 @@ def show_interactive_options(quote):
         console.print(f"{options_text}\n")
 
         choices = ["e", "ed", "d", "b"] if ai_available else ["ed", "d", "b"]
-        choice = Prompt.ask("Choice", choices=choices, default="b")
+        choice = prompt_choice("Choice: ", choices=choices, default="b")
 
         if choice == "b":
             # Return to menu

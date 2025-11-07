@@ -7,7 +7,6 @@ A CLI tool for managing and reflecting on meaningful quotes with AI insights.
 
 import typer
 from rich.console import Console
-from rich.prompt import Prompt
 
 # Import command implementations
 from commands.add import add_quote
@@ -19,6 +18,7 @@ from commands.search import search_quotes
 from commands.setup_shell import setup_shell
 from commands.theme import change_theme_command
 from commands.view import view_quote
+from utils.input_helpers import prompt_continue, prompt_input
 from utils.menu import display_menu, get_menu_choice
 from utils.themes import get_color
 from version import __version__
@@ -92,90 +92,74 @@ def run_interactive_menu():
                     theme=None,
                 )
                 dim_style = get_color("dim")
-                Prompt.ask(
-                    f"\n[{dim_style}]Press Enter to continue[/{dim_style}]", default=""
-                )
+                prompt_continue(f"\n[{dim_style}]Press Enter to continue[/{dim_style}]")
 
             elif choice == "2":
                 # View daily quote
                 console.clear()
                 show_daily(quiet=False, force=False, theme=None)
                 dim_style = get_color("dim")
-                Prompt.ask(
-                    f"\n[{dim_style}]Press Enter to continue[/{dim_style}]", default=""
-                )
+                prompt_continue(f"\n[{dim_style}]Press Enter to continue[/{dim_style}]")
 
             elif choice == "3":
                 # List all quotes
                 console.clear()
                 list_quotes(category=None, author=None, limit=10, all=True, theme=None)
                 dim_style = get_color("dim")
-                Prompt.ask(
-                    f"\n[{dim_style}]Press Enter to continue[/{dim_style}]", default=""
-                )
+                prompt_continue(f"\n[{dim_style}]Press Enter to continue[/{dim_style}]")
 
             elif choice == "4":
                 # Search quotes
                 console.clear()
                 prompt_style = f"bold {get_color('primary')}"
-                query = Prompt.ask(f"[{prompt_style}]Search query[/{prompt_style}]")
+                query = prompt_input(f"[{prompt_style}]Search query:[/{prompt_style}] ")
                 if query:
                     search_quotes(query=query, case_sensitive=False, theme=None)
                 dim_style = get_color("dim")
-                Prompt.ask(
-                    f"\n[{dim_style}]Press Enter to continue[/{dim_style}]", default=""
-                )
+                prompt_continue(f"\n[{dim_style}]Press Enter to continue[/{dim_style}]")
 
             elif choice == "5":
                 # View quote details
                 console.clear()
                 prompt_style = f"bold {get_color('primary')}"
-                quote_id = Prompt.ask(
-                    f"[{prompt_style}]Enter quote ID[/{prompt_style}]"
+                quote_id = prompt_input(
+                    f"[{prompt_style}]Enter quote ID:[/{prompt_style}] "
                 )
                 if quote_id:
                     view_quote(quote_id=quote_id, explain=False, theme=None)
                 dim_style = get_color("dim")
-                Prompt.ask(
-                    f"\n[{dim_style}]Press Enter to continue[/{dim_style}]", default=""
-                )
+                prompt_continue(f"\n[{dim_style}]Press Enter to continue[/{dim_style}]")
 
             elif choice == "6":
                 # Edit quote
                 console.clear()
                 prompt_style = f"bold {get_color('primary')}"
-                quote_id = Prompt.ask(
-                    f"[{prompt_style}]Enter quote ID to edit[/{prompt_style}]"
+                quote_id = prompt_input(
+                    f"[{prompt_style}]Enter quote ID to edit:[/{prompt_style}] "
                 )
                 if quote_id:
                     edit_quote(quote_id=quote_id, theme=None)
                 dim_style = get_color("dim")
-                Prompt.ask(
-                    f"\n[{dim_style}]Press Enter to continue[/{dim_style}]", default=""
-                )
+                prompt_continue(f"\n[{dim_style}]Press Enter to continue[/{dim_style}]")
 
             elif choice == "7":
                 # Delete quote
                 console.clear()
                 prompt_style = f"bold {get_color('primary')}"
-                quote_id = Prompt.ask(
-                    f"[{prompt_style}]Enter quote ID to delete[/{prompt_style}]"
+                quote_id = prompt_input(
+                    f"[{prompt_style}]Enter quote ID to delete:[/{prompt_style}] "
                 )
                 if quote_id:
                     delete_quote_command(quote_id=quote_id, force=False, theme=None)
                 dim_style = get_color("dim")
-                Prompt.ask(
-                    f"\n[{dim_style}]Press Enter to continue[/{dim_style}]", default=""
-                )
+                prompt_continue(f"\n[{dim_style}]Press Enter to continue[/{dim_style}]")
 
             elif choice == "8":
                 # Setup shell integration
                 console.clear()
                 setup_shell()
                 dim_style = get_color("dim")
-                Prompt.ask(
-                    f"\n[{dim_style}]Press Enter to continue[/{dim_style}]", default=""
-                )
+                prompt_continue(f"\n[{dim_style}]Press Enter to continue[/{dim_style}]")
 
             elif choice == "9":
                 # Change theme
@@ -184,9 +168,7 @@ def run_interactive_menu():
 
                 change_theme_interactive()
                 dim_style = get_color("dim")
-                Prompt.ask(
-                    f"\n[{dim_style}]Press Enter to continue[/{dim_style}]", default=""
-                )
+                prompt_continue(f"\n[{dim_style}]Press Enter to continue[/{dim_style}]")
 
         except KeyboardInterrupt:
             goodbye_style = get_color("primary")
@@ -199,9 +181,7 @@ def run_interactive_menu():
             error_style = get_color("error")
             console.print(f"\n[{error_style}]Error: {e}[/{error_style}]\n")
             dim_style = get_color("dim")
-            Prompt.ask(
-                f"[{dim_style}]Press Enter to continue[/{dim_style}]", default=""
-            )
+            prompt_continue(f"[{dim_style}]Press Enter to continue[/{dim_style}]")
 
 
 # Register commands

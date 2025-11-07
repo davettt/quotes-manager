@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.5.3] - 2025-11-08
+
+### Fixed
+- **Backspace input handling** - Backspace key now works correctly from the very first keystroke on all prompts. Previously, backspace would only work after typing at least one character
+- **Terminal prompt display** - All prompts now display with proper Rich formatting (colors, bold, etc.) instead of showing raw markup codes
+
+### Changed
+- **Input system refactored** - Replaced inconsistent Rich Prompt usage with a unified input system using prompt_toolkit for better terminal input handling
+- **New `utils/input_helpers.py` module** - Centralized input functions with consistent behavior across all prompts:
+  - `prompt_input()` - Text input with backspace support
+  - `prompt_choice()` - Choice selection with validation
+  - `prompt_continue()` - "Press Enter to continue" prompts
+  - `prompt_confirm()` - Yes/No confirmations
+- All interactive prompts now use the new input helpers for consistent, responsive behavior
+
 ## [1.5.2] - 2025-10-22
 
 ### Fixed

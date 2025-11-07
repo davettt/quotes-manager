@@ -11,7 +11,6 @@ from typing import Optional
 import typer
 from rich.console import Console
 from rich.panel import Panel
-from rich.prompt import Prompt
 
 from ai.author_identifier import identify_author_enhanced
 from ai.categorizer import suggest_categories
@@ -20,6 +19,7 @@ from ai.duplicate_detector import check_duplicates, get_similarity_level
 from models.quote import AIMetadata, Quote
 from utils.category_selector import select_categories
 from utils.display import display_success, display_warning, set_theme
+from utils.input_helpers import prompt_choice, prompt_continue, prompt_input
 from utils.storage import load_quotes, save_quotes
 
 # Enable line editing (arrow keys) for input() where supported
@@ -313,9 +313,9 @@ def add_quote(
             display_warning("Quote text cannot be empty")
             raise typer.Exit(1)
 
-        author_input = Prompt.ask("Author (or press Enter if unknown)", default="")
-        source = Prompt.ask("Where did you see this? (optional)", default="")
-        note = Prompt.ask("Why did this resonate with you? (optional)", default="")
+        author_input = prompt_input("Author (or press Enter if unknown): ", default="")
+        source = prompt_input("Where did you see this? (optional): ", default="")
+        note = prompt_input("Why did this resonate with you? (optional): ", default="")
 
         # Sanitize auxiliary fields
         author_input = _sanitize_text(author_input)
@@ -422,8 +422,8 @@ def add_quote(
                     console.print("  [yellow]n[/yellow] - Add as new quote anyway")
                     console.print("  [yellow]c[/yellow] - Cancel")
 
-                    choice = Prompt.ask(
-                        "Choice", choices=["e", "n", "c"], default="e"
+                    choice = prompt_choice(
+                        "Choice: ", choices=["e", "n", "c"], default="e"
                     ).lower()
 
                     if choice == "c":
@@ -467,7 +467,7 @@ def add_quote(
         # Use interactive category selector with AI suggestions pre-selected
         if ai_available and (author_result or similar_quotes or cat_result):
             console.print()
-            Prompt.ask("[dim]Press Enter to select categories[/dim]", default="")
+            prompt_continue("[dim]Press Enter to select categories[/dim]")
         else:
             console.print()
 

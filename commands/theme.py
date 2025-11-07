@@ -2,10 +2,10 @@
 
 import typer
 from rich.console import Console
-from rich.prompt import Prompt
 from rich.table import Table
 
 from utils.display import get_current_theme_name, set_theme
+from utils.input_helpers import prompt_choice
 from utils.themes import THEMES, get_color
 
 console = Console()
@@ -41,8 +41,8 @@ def change_theme_interactive():
     console.print()
 
     # Get selection
-    choice = Prompt.ask(
-        "[bold yellow]Select theme[/bold yellow]",
+    choice = prompt_choice(
+        "[bold yellow]Select theme:[/bold yellow] ",
         choices=["1", "2", "3", "4", "5"],
         default="1",
     )

@@ -7,7 +7,6 @@ import sys
 
 import typer
 from rich.console import Console
-from rich.prompt import Prompt
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 from commands.add import _read_multiline_input, _sanitize_text
@@ -17,6 +16,7 @@ from utils.display import (
     display_success,
     set_theme,
 )
+from utils.input_helpers import prompt_choice, prompt_input
 from utils.storage import get_quote_by_id, load_quotes, update_quote
 
 console = Console()
@@ -80,7 +80,9 @@ def edit_quote(
     console.print("[C] Categories")
     console.print("[X] Cancel")
 
-    choice = Prompt.ask("\nChoice", choices=["t", "a", "s", "n", "c", "x"], default="x")
+    choice = prompt_choice(
+        "\nChoice: ", choices=["t", "a", "s", "n", "c", "x"], default="x"
+    )
 
     if choice == "x":
         console.print("\nEdit cancelled")
@@ -97,8 +99,8 @@ def edit_quote(
 
     elif choice == "a":
         console.print(f"\n[dim]Current author:[/dim] {quote.author}")
-        new_author = Prompt.ask(
-            "New author (or press Enter to keep current)", default=""
+        new_author = prompt_input(
+            "New author (or press Enter to keep current): ", default=""
         )
         if new_author.strip():
             quote.author = new_author.strip()
@@ -107,8 +109,8 @@ def edit_quote(
         console.print(
             f"\n[dim]Current source:[/dim] {quote.source if quote.source else '(none)'}"
         )
-        new_source = Prompt.ask(
-            "New source (or press Enter to keep current)", default=""
+        new_source = prompt_input(
+            "New source (or press Enter to keep current): ", default=""
         )
         if new_source.strip() or new_source == "":
             quote.source = new_source.strip()
@@ -117,15 +119,17 @@ def edit_quote(
         console.print(
             f"\n[dim]Current note:[/dim] {quote.personal_note if quote.personal_note else '(none)'}"
         )
-        new_note = Prompt.ask("New note (or press Enter to keep current)", default="")
+        new_note = prompt_input(
+            "New note (or press Enter to keep current): ", default=""
+        )
         if new_note.strip() or new_note == "":
             quote.personal_note = new_note.strip()
 
     elif choice == "c":
         current_cats = ", ".join(quote.categories) if quote.categories else "(none)"
         console.print(f"\n[dim]Current categories:[/dim] {current_cats}")
-        new_categories = Prompt.ask(
-            "New categories (comma-separated, or press Enter to keep current)",
+        new_categories = prompt_input(
+            "New categories (comma-separated, or press Enter to keep current): ",
             default="",
         )
         if new_categories.strip():
