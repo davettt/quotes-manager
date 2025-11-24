@@ -1,8 +1,8 @@
 """Interactive category selector for quotes."""
 
+import os
 import re
 import sys
-import os
 from typing import List
 
 from rich.console import Console
@@ -52,7 +52,7 @@ def select_categories(
         preselected = []
 
     selected = set(preselected)
-    custom_categories = []
+    custom_categories: list[str] = []
 
     while True:
         # Clear and display header
@@ -127,7 +127,9 @@ def select_categories(
                 custom = re.sub(r"[^a-z0-9\-_]", "", custom)
 
                 if not custom:
-                    console.print("[red]Category name must contain letters or numbers[/red]")
+                    console.print(
+                        "[red]Category name must contain letters or numbers[/red]"
+                    )
                     prompt_continue("[dim]Press Enter to continue[/dim]")
                     continue
 

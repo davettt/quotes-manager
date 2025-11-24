@@ -62,6 +62,39 @@ exclude_dirs = [
 ]
 skips = ["B110", "B311"]  # B110: try-except-pass is intentional, B311: random is not for crypto
 
+[tool.mypy]
+# MyPy type checking configuration
+python_version = "3.9"
+warn_return_any = false  # Don't warn about Any returns from untyped libraries
+warn_unused_configs = true
+disallow_untyped_defs = false  # Gradual typing - allow unannotated functions
+disallow_incomplete_defs = false  # Gradual typing
+disallow_untyped_calls = false  # Gradual typing - allow calls to untyped libraries
+check_untyped_defs = false  # Don't check bodies of untyped external code
+no_implicit_optional = true  # Require explicit Optional[] for optional types
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_no_return = true
+warn_unreachable = true
+strict_optional = false
+ignore_missing_imports = true  # Ignore missing type stubs for third-party libraries
+
+# Exclude directories (regex patterns)
+exclude = [
+    ".git",
+    ".venv",
+    "venv",
+    "__pycache__",
+    "local_data/",
+    ".mypy_cache",
+    ".pytest_cache",
+    ".ruff_cache",
+    ".claude/",
+    "build/",
+    "dist/",
+    ".*\\.egg-info/",
+]
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 python_files = "test_*.py"

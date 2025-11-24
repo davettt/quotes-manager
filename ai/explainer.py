@@ -40,10 +40,10 @@ Quote: \"\"\"{quote_text}\"\"\"
 Author: {author}"""
 
     if source:
-        prompt += f'\nSource: \"\"\"{source}\"\"\"'
+        prompt += f'\nSource: """{source}"""'
 
     if personal_note:
-        prompt += f'\nContext: \"\"\"{personal_note}\"\"\"'
+        prompt += f'\nContext: """{personal_note}"""'
 
     prompt += """
 
