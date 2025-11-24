@@ -46,6 +46,61 @@ except Exception:
 
 console = Console()
 
+# Input validation constants
+MAX_QUOTE_LENGTH = 10000
+MAX_AUTHOR_LENGTH = 500
+MAX_SOURCE_LENGTH = 1000
+MAX_NOTE_LENGTH = 5000
+MAX_CATEGORY_LENGTH = 50
+
+
+def _validate_input_length(text: str, max_length: int, field_name: str) -> bool:
+    """Validate that input doesn't exceed maximum length.
+
+    Args:
+        text: The text to validate
+        max_length: Maximum allowed length
+        field_name: Name of the field for error message
+
+    Returns:
+        True if valid, False otherwise
+    """
+    if len(text) > max_length:
+        display_warning(
+            f"{field_name} is too long ({len(text)} chars, max {max_length})"
+        )
+        return False
+    return True
+
+
+def _validate_source(source: str) -> bool:
+    """Validate source field - should be URL-like if provided.
+
+    Args:
+        source: The source text to validate
+
+    Returns:
+        True if valid (or empty), False if invalid
+    """
+    if not source or not source.strip():
+        return True
+
+    source = source.strip()
+
+    # Check if it looks like a URL
+    url_pattern = re.compile(
+        r"^(https?://|www\.|[a-z0-9.-]+\.[a-z]{2,}|[A-Z][\w\s]*(?:Book|Article|Paper|Quote))"
+    )
+
+    if not url_pattern.match(source):
+        # It doesn't look URL-like, but we'll allow it with a warning
+        display_warning(
+            f"Source '{source[:50]}...' doesn't look like a URL - consider including the source website"
+        )
+        return True
+
+    return True
+
 
 def _sanitize_text(text: str) -> str:
     """Sanitize user-provided text while preserving meaningful content.
@@ -313,6 +368,10 @@ def add_quote(
             display_warning("Quote text cannot be empty")
             raise typer.Exit(1)
 
+        # Validate quote text length
+        if not _validate_input_length(text, MAX_QUOTE_LENGTH, "Quote text"):
+            raise typer.Exit(1)
+
         author_input = prompt_input("Author (or press Enter if unknown): ", default="")
         source = prompt_input("Where did you see this? (optional): ", default="")
         note = prompt_input("Why did this resonate with you? (optional): ", default="")
@@ -321,6 +380,23 @@ def add_quote(
         author_input = _sanitize_text(author_input)
         source = _sanitize_text(source)
         note = _sanitize_text(note)
+
+        # Validate field lengths
+        if author_input.strip() and not _validate_input_length(
+            author_input, MAX_AUTHOR_LENGTH, "Author"
+        ):
+            raise typer.Exit(1)
+        if source.strip() and not _validate_input_length(
+            source, MAX_SOURCE_LENGTH, "Source"
+        ):
+            raise typer.Exit(1)
+        if note.strip() and not _validate_input_length(
+            note, MAX_NOTE_LENGTH, "Personal note"
+        ):
+            raise typer.Exit(1)
+
+        # Validate source field
+        _validate_source(source)
 
         # AI Processing Phase
         if ai_available:
@@ -483,6 +559,10 @@ def add_quote(
             display_warning("Quote text cannot be empty")
             raise typer.Exit(1)
 
+        # Validate quote text length
+        if not _validate_input_length(text, MAX_QUOTE_LENGTH, "Quote text"):
+            raise typer.Exit(1)
+
         # Use defaults for unspecified fields
         author = author if author is not None else "Anonymous"
         source = source if source is not None else ""
@@ -491,8 +571,26 @@ def add_quote(
         author = _sanitize_text(author)
         source = _sanitize_text(source)
         note = _sanitize_text(note)
+
+        # Validate field lengths
+        if author != "Anonymous" and not _validate_input_length(
+            author, MAX_AUTHOR_LENGTH, "Author"
+        ):
+            raise typer.Exit(1)
+        if source and not _validate_input_length(source, MAX_SOURCE_LENGTH, "Source"):
+            raise typer.Exit(1)
+        if note and not _validate_input_length(note, MAX_NOTE_LENGTH, "Personal note"):
+            raise typer.Exit(1)
+
+        # Validate source field
+        _validate_source(source)
+
         category_list = (
-            [c.strip() for c in categories.split(",") if c.strip()]
+            [
+                c.strip()
+                for c in categories.split(",")
+                if c.strip() and len(c.strip()) <= MAX_CATEGORY_LENGTH
+            ]
             if categories
             else []
         )

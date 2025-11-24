@@ -40,7 +40,7 @@ def identify_author(quote_text: str) -> Dict[str, Any]:
     prompt = f"""Who said this quote? If you're confident (>70% sure), provide the author's name.
 If you're unsure or don't know, respond with "Anonymous".
 
-Quote: "{quote_text}"
+Quote: \"\"\"{quote_text}\"\"\"
 
 Respond with ONLY a JSON object in this exact format:
 {{

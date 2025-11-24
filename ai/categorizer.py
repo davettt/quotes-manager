@@ -48,7 +48,7 @@ def suggest_categories(quote_text: str) -> Dict[str, Any]:
 
 Categories: {", ".join(PREDEFINED_CATEGORIES)}
 
-Quote: "{quote_text}"
+Quote: \"\"\"{quote_text}\"\"\"
 
 Respond with ONLY a JSON object in this exact format:
 {{

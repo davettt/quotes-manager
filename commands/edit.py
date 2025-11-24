@@ -103,7 +103,7 @@ def edit_quote(
             "New author (or press Enter to keep current): ", default=""
         )
         if new_author.strip():
-            quote.author = new_author.strip()
+            quote.author = _sanitize_text(new_author).strip()
 
     elif choice == "s":
         console.print(
@@ -113,7 +113,7 @@ def edit_quote(
             "New source (or press Enter to keep current): ", default=""
         )
         if new_source.strip() or new_source == "":
-            quote.source = new_source.strip()
+            quote.source = _sanitize_text(new_source).strip()
 
     elif choice == "n":
         console.print(
@@ -123,7 +123,7 @@ def edit_quote(
             "New note (or press Enter to keep current): ", default=""
         )
         if new_note.strip() or new_note == "":
-            quote.personal_note = new_note.strip()
+            quote.personal_note = _sanitize_text(new_note).strip()
 
     elif choice == "c":
         current_cats = ", ".join(quote.categories) if quote.categories else "(none)"
@@ -134,7 +134,9 @@ def edit_quote(
         )
         if new_categories.strip():
             quote.categories = [
-                c.strip() for c in new_categories.split(",") if c.strip()
+                _sanitize_text(c).strip().lower()
+                for c in new_categories.split(",")
+                if c.strip()
             ]
 
     # Save changes

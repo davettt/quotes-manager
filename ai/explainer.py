@@ -36,14 +36,14 @@ def explain_quote(quote_dict: Dict) -> str:
     # Create prompt for deep explanation
     prompt = f"""Provide a thoughtful, insightful explanation of this quote.
 
-Quote: "{quote_text}"
+Quote: \"\"\"{quote_text}\"\"\"
 Author: {author}"""
 
     if source:
-        prompt += f"\nSource: {source}"
+        prompt += f'\nSource: \"\"\"{source}\"\"\"'
 
     if personal_note:
-        prompt += f"\nContext: {personal_note}"
+        prompt += f'\nContext: \"\"\"{personal_note}\"\"\"'
 
     prompt += """
 

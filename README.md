@@ -47,6 +47,24 @@ quotes
 
 ---
 
+## 🔒 Privacy & Security
+
+**Your data stays private.** All quotes are stored locally on your machine. AI features are optional and only send data when you explicitly use them.
+
+**Key privacy features:**
+- ✅ **Local-first** - All quotes stored in `local_data/personal_data/` (not cloud synced)
+- ✅ **Optional AI** - Use `--skip-ai` flag or disable in config to avoid API calls
+- ✅ **Secure input handling** - All user input is validated and sanitized
+- ✅ **Open source** - Audit the code yourself
+
+**See [PRIVACY.md](PRIVACY.md) for detailed information about:**
+- How data is stored and protected
+- What data is sent to APIs (and when)
+- Best practices for securing your API key
+- Transparency and auditability
+
+---
+
 ## Installation
 
 ### Prerequisites

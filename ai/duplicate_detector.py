@@ -36,8 +36,8 @@ Consider:
 - Similar wording or phrasing
 - Minor differences like punctuation, capitalization don't matter much
 
-Quote 1: "{quote1_text}"
-Quote 2: "{quote2_text}"
+Quote 1: \"\"\"{quote1_text}\"\"\"
+Quote 2: \"\"\"{quote2_text}\"\"\"
 
 Respond with ONLY a JSON object in this exact format:
 {{
