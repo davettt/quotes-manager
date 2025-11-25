@@ -1,8 +1,6 @@
 """Interactive category selector for quotes."""
 
-import os
 import re
-import sys
 from typing import List
 
 from rich.console import Console
@@ -10,10 +8,6 @@ from rich.panel import Panel
 from rich.table import Table
 
 from utils.input_helpers import prompt_continue, prompt_input
-
-# Import sanitization function
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
-from commands.add import _sanitize_text
 
 # Validation constant for category length
 MAX_CATEGORY_LENGTH = 50
@@ -112,6 +106,9 @@ def select_categories(
             # Add custom category
             custom = prompt_input("\n[cyan]Enter custom category name:[/cyan] ")
             if custom.strip():
+                # Import here to avoid circular dependency
+                from commands.add import _sanitize_text
+
                 # Sanitize the category name
                 custom = _sanitize_text(custom).strip().lower()
 
