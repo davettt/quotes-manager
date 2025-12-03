@@ -73,35 +73,6 @@ def _validate_input_length(text: str, max_length: int, field_name: str) -> bool:
     return True
 
 
-def _validate_source(source: str) -> bool:
-    """Validate source field - should be URL-like if provided.
-
-    Args:
-        source: The source text to validate
-
-    Returns:
-        True if valid (or empty), False if invalid
-    """
-    if not source or not source.strip():
-        return True
-
-    source = source.strip()
-
-    # Check if it looks like a URL
-    url_pattern = re.compile(
-        r"^(https?://|www\.|[a-z0-9.-]+\.[a-z]{2,}|[A-Z][\w\s]*(?:Book|Article|Paper|Quote))"
-    )
-
-    if not url_pattern.match(source):
-        # It doesn't look URL-like, but we'll allow it with a warning
-        display_warning(
-            f"Source '{source[:50]}...' doesn't look like a URL - consider including the source website"
-        )
-        return True
-
-    return True
-
-
 def _sanitize_text(text: str) -> str:
     """Sanitize user-provided text while preserving meaningful content.
 
@@ -395,9 +366,6 @@ def add_quote(
         ):
             raise typer.Exit(1)
 
-        # Validate source field
-        _validate_source(source)
-
         # AI Processing Phase
         if ai_available:
             console.print()
@@ -581,9 +549,6 @@ def add_quote(
             raise typer.Exit(1)
         if note and not _validate_input_length(note, MAX_NOTE_LENGTH, "Personal note"):
             raise typer.Exit(1)
-
-        # Validate source field
-        _validate_source(source)
 
         category_list = (
             [

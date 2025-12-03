@@ -57,3 +57,4 @@ local_data/exports/
 !local_data/personal_data/.gitkeep
 !local_data/exports/.gitkeep
 package-lock.json
+.Tresorit/
