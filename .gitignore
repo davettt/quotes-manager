@@ -50,7 +50,12 @@ Thumbs.db
 # Project-specific
 local_data/personal_data/
 local_data/exports/
+local_data/images/
 *.log
+
+# Atomic write temp files and backups
+*.tmp
+*.bak
 
 # Keep directory structure
 !local_data/.gitkeep

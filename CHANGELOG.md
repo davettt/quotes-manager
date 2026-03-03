@@ -7,6 +7,38 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.6.0] - 2026-03-03
+
+### Added
+- **Quote image generator** (`quotes image` / menu option G) — render any quote as a shareable PNG image
+  - **Pillow-based renderer** (`utils/image_renderer.py`) with word-wrap, optimal font sizing, and vertical centring
+  - **4 style presets**: `dark` (Playfair Display, editorial serif), `light` (Lora, warm white wash), `minimal` (Inter, 30 % overlay, photo-forward), `bold` (Playfair Display bold weight, 76 % overlay, max contrast)
+  - **5 aspect ratios**: `square` (1080×1080), `portrait` (1080×1350), `landscape` (1920×1080), `mobile` (1080×1920), `tablet` (1536×2048)
+  - **Unsplash integration** (`ai/unsplash.py`) — automatic background photo fetch with attribution watermark embedded in image (Unsplash API ToS compliant)
+  - **Gradient fallback** — category-matched colour gradients when Unsplash is unavailable or disabled
+  - **8 bundled OFL variable fonts**: Playfair Display, Lora, Inter, Nunito, Merriweather, Raleway, Source Code Pro
+  - **Interactive refinement loop** — after rendering, choose to restyle (same photo), fetch a new photo, or change the search keyword without re-entering all options
+  - **CLI command**: `quotes image --id <id> --ratio mobile --style bold --topic "mountains"`
+  - **Menu integration**: option `G` from main menu and `g` from quote view screen, both with full style/ratio/topic prompts
+
+- **Data safety** (TC-85) — atomic writes and automatic backup/recovery for `quotes.json`
+  - All writes go via `.tmp` → `os.replace()` (atomic rename); a crash or cloud-sync interruption during a write can never corrupt the primary file
+  - Before every write, `quotes.json` is backed up to `quotes.json.bak` — but only when the source is valid JSON, so a corrupt file never overwrites a healthy backup
+  - On load failure, automatically recovers from backup with a yellow warning showing how many quotes were saved; falls back to `[]` with a red error only if backup is also unreadable
+  - `save_config()` is now atomic too
+
+### Changed
+- **Mobile image layout** — padding increased to 18 % and font capped at 52 pt to keep text clear of iPhone status bar, widgets, dock, and perspective-zoom crop zone
+- **Decorative quote mark** position now tied to the layout padding rather than a fixed percentage, so it moves inward correctly on mobile
+- **`utils/storage.py`** refactored: `_load_raw()` helper deduplicates read logic across all functions; `add_to_display_history()` and `save_quotes()` now both use atomic writes
+- Upgraded `typer>=0.13.0` to resolve `--help` incompatibility with Click 8.3
+
+### Fixed
+- `prompt_input` missing from `commands/view.py` import (caused `NameError` on image generation from view screen)
+- `prompt_choice` missing from `main.py` top-level import (caused `F821` lint error)
+- `Image.LANCZOS` → `Image.Resampling.LANCZOS` for Pillow ≥ 10 compatibility
+- `_text_size()` return values explicitly cast to `int` to satisfy mypy
+
 ## [1.5.3] - 2025-11-08
 
 ### Fixed

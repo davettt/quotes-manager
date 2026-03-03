@@ -11,7 +11,7 @@ console = Console()
 # Import prompt_toolkit for better input handling
 PT_AVAILABLE = False
 try:
-    from prompt_toolkit import PromptSession  # type: ignore
+    from prompt_toolkit import PromptSession
 
     PT_AVAILABLE = True
 except Exception:
@@ -35,7 +35,7 @@ def prompt_input(prompt_text: str, default: str = "") -> str:
         try:
             # Print the formatted prompt using Rich, then get input with prompt_toolkit
             console.print(prompt_text)
-            session = PromptSession()
+            session: PromptSession = PromptSession()
             result = session.prompt("")  # Input on next line after prompt
             return result if result else default
         except KeyboardInterrupt:
@@ -66,7 +66,7 @@ def prompt_choice(prompt_text: str, choices: List[str], default: str) -> str:
             while True:
                 # Print the formatted prompt using Rich, then get input with prompt_toolkit
                 console.print(prompt_text)
-                session = PromptSession()
+                session: PromptSession = PromptSession()
                 result = session.prompt("").strip()  # Input on next line after prompt
                 if not result:
                     return default

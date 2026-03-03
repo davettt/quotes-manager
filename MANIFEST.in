@@ -3,3 +3,4 @@ include CHANGELOG.md
 include requirements.txt
 include .env.example
 recursive-include .claude *
+recursive-include assets *

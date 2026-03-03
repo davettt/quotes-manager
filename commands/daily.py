@@ -1,7 +1,6 @@
 """Daily quote command implementation."""
 
 import random
-import sys
 from datetime import datetime
 from typing import Optional
 
@@ -102,26 +101,6 @@ def show_daily(
     Shows a different quote each day, with no repeats within 21 days.
     Use --quiet for a minimal display suitable for shell startup.
     """
-    # Handle Typer boolean flag parsing
-    # Typer converts False to string 'False' for boolean options
-    # Check if it's a string and convert it, or if it's None, check sys.argv
-    if isinstance(quiet, str):
-        quiet = (
-            quiet.lower() in ("true", "1", "yes")
-            or "--quiet" in sys.argv
-            or "-q" in sys.argv
-        )
-    elif quiet is None:
-        quiet = "--quiet" in sys.argv or "-q" in sys.argv
-
-    if isinstance(force, str):
-        force = (
-            force.lower() in ("true", "1", "yes")
-            or "--force" in sys.argv
-            or "-f" in sys.argv
-        )
-    elif force is None:
-        force = "--force" in sys.argv or "-f" in sys.argv
 
     # Set theme if provided
     if theme:

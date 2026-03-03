@@ -35,6 +35,7 @@ def display_menu() -> None:
         ("7", "Delete quote"),
         ("8", "Setup shell integration"),
         ("9", "Change theme"),
+        ("G", "Generate quote image"),
         ("0", "Exit"),
     ]
 
@@ -64,7 +65,7 @@ def get_menu_choice() -> str:
     prompt_style = f"bold {get_color('warning')}"
     choice = prompt_choice(
         f"[{prompt_style}]Select an option:[/{prompt_style}] ",
-        choices=["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"],
+        choices=["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "g", "G"],
         default="0",
     )
     return choice

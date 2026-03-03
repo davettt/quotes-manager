@@ -2,7 +2,7 @@
 
 *A beautiful CLI tool for saving, organizing, and reflecting on meaningful quotes with AI-powered insights.*
 
-**Current Version:** v1.5.3 | [Changelog](CHANGELOG.md)
+**Current Version:** v1.6.0 | [Changelog](CHANGELOG.md)
 
 ---
 
@@ -13,6 +13,7 @@
 - 📅 **Daily inspiration** - see a different quote each day (no repeats for 21 days)
 - 🔍 **Smart search** - find quotes by keyword, category, or author
 - 💡 **AI explanations** - get deep insights into what quotes mean
+- 🖼️ **Quote images** - generate shareable PNGs with Unsplash backgrounds, 4 style presets, and 5 aspect ratios including mobile wallpaper
 - ✨ **Beautiful terminal** - formatted with Rich for an enjoyable experience
 
 ---
@@ -218,6 +219,7 @@ You'll see an interactive menu:
   7 - Delete quote
   8 - Setup shell integration
   9 - Change theme
+  G - Generate quote image
   0 - Exit
 
 Choice [0]:
@@ -235,6 +237,7 @@ quotes daily         # See your daily quote
 quotes list          # List all quotes
 quotes search "work" # Search by keyword
 quotes view <id>     # View quote details
+quotes image         # Generate a quote image
 quotes theme         # Change color theme
 ```
 
@@ -430,6 +433,38 @@ pip install -r requirements.txt  # Includes dev tools
 pre-commit install
 # See DEVELOPMENT.md for complete guide
 ```
+
+### Generating Quote Images
+
+```bash
+# Generate image for today's daily quote (opens preview automatically)
+quotes image
+
+# Specific quote, mobile wallpaper size, bold style
+quotes image --id a1b2c3d4 --ratio mobile --style bold
+
+# Custom Unsplash search topic, no preview
+quotes image --id a1b2c3d4 --topic "mountains" --no-preview
+
+# Gradient background only (no Unsplash)
+quotes image --ratio square --no-photo
+```
+
+**From the interactive menu:** press `G` then follow the prompts for style, ratio, and topic. After the image renders you can try a different style, fetch a new photo `(p)`, or change the search keyword `(k)` — all without re-fetching from Unsplash.
+
+**Style presets:**
+- `dark` — Playfair Display serif, 55 % black overlay, decorative quote mark
+- `light` — Lora serif, 69 % white wash, clean dark text
+- `minimal` — Inter sans, 30 % overlay, photo shows through
+- `bold` — Playfair Display bold weight, 76 % overlay, maximum contrast
+
+**Aspect ratios:** `square` (1080×1080), `portrait` (1080×1350), `landscape` (1920×1080), `mobile` (1080×1920), `tablet` (1536×2048)
+
+**Unsplash:** Add `UNSPLASH_ACCESS_KEY=your_key` to `.env` for automatic background photos. Falls back to a category-matched gradient when unavailable.
+
+Images are saved to `local_data/images/`.
+
+---
 
 ### Built With
 

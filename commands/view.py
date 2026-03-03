@@ -9,7 +9,7 @@ from rich.prompt import Confirm
 from ai.claude_client import is_api_available
 from ai.explainer import explain_quote
 from utils.display import display_error, display_quote_detailed, set_theme
-from utils.input_helpers import prompt_choice
+from utils.input_helpers import prompt_choice, prompt_input
 from utils.storage import get_quote_by_id, load_quotes, update_quote
 
 console = Console()
@@ -110,6 +110,7 @@ def show_interactive_options(quote):
     # Import here to avoid circular imports
     from commands.delete import delete_quote_command
     from commands.edit import edit_quote
+    from commands.image import generate_image_interactive
 
     # Check if AI is available
     ai_available = is_api_available()
@@ -123,6 +124,7 @@ def show_interactive_options(quote):
                     if ai_available
                     else "  [dim]e - Explain (AI unavailable)[/dim]"
                 ),
+                "  [yellow]g[/yellow] - Generate image",
                 "  [yellow]ed[/yellow] - Edit this quote",
                 "  [yellow]d[/yellow] - Delete this quote",
                 "  [yellow]b[/yellow] - Back to menu",
@@ -131,12 +133,50 @@ def show_interactive_options(quote):
 
         console.print(f"{options_text}\n")
 
-        choices = ["e", "ed", "d", "b"] if ai_available else ["ed", "d", "b"]
+        choices = ["e", "g", "ed", "d", "b"] if ai_available else ["g", "ed", "d", "b"]
         choice = prompt_choice("Choice: ", choices=choices, default="b")
 
         if choice == "b":
             # Return to menu
             return
+
+        elif choice == "g":
+            from utils.image_renderer import PRESETS, RATIOS
+
+            valid_styles = list(PRESETS.keys())
+            valid_ratios = list(RATIOS.keys())
+
+            console.print(f"\n  [dim]Styles: {', '.join(valid_styles)}[/dim]")
+            style = prompt_choice(
+                "Style (default: dark): ",
+                choices=valid_styles,
+                default="dark",
+            )
+
+            console.print(f"\n  [dim]Ratios: {', '.join(valid_ratios)}[/dim]")
+            ratio = prompt_choice(
+                "Ratio (default: square): ",
+                choices=valid_ratios,
+                default="square",
+            )
+
+            default_topic = quote.categories[0] if quote.categories else "nature"
+            console.print(
+                f"\n  [dim]Leave blank to use quote category ({default_topic})[/dim]"
+            )
+            topic_input = prompt_input("Unsplash search topic: ")
+            topic = topic_input.strip() or None
+
+            console.print()
+            generate_image_interactive(
+                quote,
+                ratio=ratio,
+                style=style,
+                topic=topic,
+                no_photo=False,
+                no_preview=False,
+            )
+            console.print()
 
         elif choice == "e" and ai_available:
             explanation = show_explanation(quote)

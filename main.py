@@ -13,12 +13,13 @@ from commands.add import add_quote
 from commands.daily import show_daily
 from commands.delete import delete_quote_command
 from commands.edit import edit_quote
+from commands.image import image_quote
 from commands.list_cmd import list_quotes
 from commands.search import search_quotes
 from commands.setup_shell import setup_shell
 from commands.theme import change_theme_command
 from commands.view import view_quote
-from utils.input_helpers import prompt_continue, prompt_input
+from utils.input_helpers import prompt_choice, prompt_continue, prompt_input
 from utils.menu import display_menu, get_menu_choice
 from utils.themes import get_color
 from version import __version__
@@ -170,6 +171,90 @@ def run_interactive_menu():
                 dim_style = get_color("dim")
                 prompt_continue(f"\n[{dim_style}]Press Enter to continue[/{dim_style}]")
 
+            elif choice in ("g", "G"):
+                # Generate quote image
+                console.clear()
+                from commands.daily import get_daily_quote
+                from commands.image import generate_image_interactive
+                from utils.image_renderer import PRESETS, RATIOS
+                from utils.storage import get_quote_by_id, load_quotes
+
+                prompt_style = f"bold {get_color('primary')}"
+                dim_style = get_color("dim")
+
+                # --- Quote selection ---
+                quote_id = prompt_input(
+                    f"[{prompt_style}]Quote ID (leave blank for today's daily):[/{prompt_style}] "
+                )
+
+                quote = None
+                if quote_id:
+                    quote = get_quote_by_id(quote_id)
+                    if not quote:
+                        matches = [
+                            q for q in load_quotes() if q.id.startswith(quote_id)
+                        ]
+                        if len(matches) == 1:
+                            quote = matches[0]
+                        elif len(matches) > 1:
+                            console.print(
+                                f"\n[{get_color('error')}]Multiple quotes match. Please be more specific.[/{get_color('error')}]"
+                            )
+                    if not quote:
+                        console.print(
+                            f"\n[{get_color('error')}]Quote not found.[/{get_color('error')}]"
+                        )
+                else:
+                    quote = get_daily_quote()
+
+                if quote:
+                    # --- Style ---
+                    valid_styles = list(PRESETS.keys())
+                    console.print(
+                        f"\n  [{dim_style}]Styles: {', '.join(valid_styles)}[/{dim_style}]"
+                    )
+                    style = prompt_choice(
+                        f"[{prompt_style}]Style (default: dark):[/{prompt_style}] ",
+                        choices=valid_styles,
+                        default="dark",
+                    )
+
+                    # --- Ratio ---
+                    valid_ratios = list(RATIOS.keys())
+                    console.print(
+                        f"\n  [{dim_style}]Ratios: {', '.join(valid_ratios)}[/{dim_style}]"
+                    )
+                    ratio = prompt_choice(
+                        f"[{prompt_style}]Ratio (default: square):[/{prompt_style}] ",
+                        choices=valid_ratios,
+                        default="square",
+                    )
+
+                    # --- Topic override ---
+                    default_topic = (
+                        quote.categories[0] if quote.categories else "nature"
+                    )
+                    console.print(
+                        f"\n  [{dim_style}]Leave blank to use quote category ({default_topic})[/{dim_style}]"
+                    )
+                    topic_input = prompt_input(
+                        f"[{prompt_style}]Unsplash search topic:[/{prompt_style}] "
+                    )
+                    topic = topic_input.strip() or None
+
+                    console.print()
+                    generate_image_interactive(
+                        quote,
+                        ratio=ratio,
+                        style=style,
+                        topic=topic,
+                        no_photo=False,
+                        no_preview=False,
+                    )
+
+                dim_style = get_color("dim")
+                prompt_continue(f"\n[{dim_style}]Press Enter to continue[/{dim_style}]")
+
         except KeyboardInterrupt:
             goodbye_style = get_color("primary")
             console.print(f"\n\n[{goodbye_style}]Goodbye! 📖✨[/{goodbye_style}]\n")
@@ -192,6 +277,7 @@ app.command(name="search")(search_quotes)
 app.command(name="edit")(edit_quote)
 app.command(name="delete")(delete_quote_command)
 app.command(name="daily")(show_daily)
+app.command(name="image")(image_quote)
 app.command(name="setup")(setup_shell)
 app.command(name="theme")(change_theme_command)
 

@@ -1,10 +1,11 @@
 """Version information for Quotes Manager."""
 
-__version__ = "1.5.3"
+__version__ = "1.6.0"
 __author__ = "David Tiong"
 __description__ = "A CLI tool for managing and reflecting on meaningful quotes"
 
 # Version history:
+# 1.6.0 (2026-03-03): Quote image generator — Pillow renderer, Unsplash backgrounds, 4 style presets, 5 aspect ratios, interactive restyle/re-photo loop, mobile safe-area layout; atomic JSON writes with auto-backup recovery (TC-68, TC-85)
 # 1.5.3 (2025-11-08): Fix backspace input handling in all prompts; use prompt_toolkit for consistent, responsive terminal input with full formatting support
 # 1.5.2 (2025-10-22): Fix venv setup on fresh clone; fix Typer boolean flag parsing for --quiet/--force; enhance shell integration docs
 # 1.5.1 (2025-10-16): Add web search fallback for author identification
