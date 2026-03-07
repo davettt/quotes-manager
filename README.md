@@ -26,8 +26,10 @@
 # 1. Clone and set up virtual environment
 git clone <repo-url>
 cd quotes-manager
-python3 -m venv venv
-source venv/bin/activate
+
+# macOS: use python3.12 if available (avoids LibreSSL warning — see Troubleshooting)
+python3.12 -m venv .venv || python3 -m venv .venv
+source .venv/bin/activate
 
 # 2. Install (use -e for editable mode so it finds local data files)
 pip install -e .
@@ -71,7 +73,7 @@ quotes
 ### Prerequisites
 
 Before installing, make sure you have:
-- **Python 3.9 or newer** ([Check version](https://www.python.org/downloads/): `python3 --version`)
+- **Python 3.11 or newer** ([Check version](https://www.python.org/downloads/): `python3 --version`) — on macOS, Python 3.12 via Homebrew is recommended (`brew install python@3.12`) to avoid a LibreSSL compatibility warning
 - **pip** (usually comes with Python)
 - **Anthropic API key** ([Get one here](https://console.anthropic.com/) - paid service)
 
@@ -86,12 +88,13 @@ cd quotes-manager
 
 ```bash
 # Create a virtual environment
-python3 -m venv venv
+# macOS: use python3.12 if available (avoids LibreSSL warning)
+python3.12 -m venv .venv || python3 -m venv .venv
 
 # Activate it
-source venv/bin/activate  # macOS/Linux
+source .venv/bin/activate  # macOS/Linux
 # or on Windows:
-# venv\Scripts\activate
+# .venv\Scripts\activate
 ```
 
 **Why?** Virtual environments keep project dependencies isolated and avoid conflicts with system Python.
@@ -179,8 +182,36 @@ python3 main.py
 - Then try: `pip install -e .` again
 
 **Python version too old?**
-- Install Python 3.9+ from [python.org](https://www.python.org/downloads/)
+- Install Python 3.11+ from [python.org](https://www.python.org/downloads/) or via Homebrew: `brew install python@3.12`
 - Check version: `python3 --version`
+
+**urllib3 / LibreSSL warning on macOS?**
+- You see: `NotOpenSSLWarning: urllib3 v2 only supports OpenSSL 1.1.1+, currently the 'ssl' module is compiled with 'LibreSSL ...'`
+- This happens when using macOS system Python (3.9), which ships with LibreSSL instead of OpenSSL
+- Fix: recreate the venv with Python 3.12 from Homebrew:
+  ```bash
+  brew install python@3.12
+  rm -rf .venv
+  python3.12 -m venv .venv --upgrade-deps
+  pip install -r requirements.txt
+  pip install -e .
+  ```
+
+**`quotes` runs but uses the wrong Python (system instead of venv)?**
+- Check which binary is being used: `which quotes`
+- If it points to `~/Library/Python/3.x/bin/quotes`, an old system-level install is taking priority
+- Remove it: `rm ~/Library/Python/3.x/bin/quotes` (replace `3.x` with the version shown)
+- Then `which quotes` should point to `.venv/bin/quotes`
+
+**`bad interpreter: /path/to/.venv/bin/python3.12: no such file or directory`?**
+- Your venv has stale paths (e.g. created on a different machine or with a different username)
+- Recreate it:
+  ```bash
+  rm -rf .venv
+  python3.12 -m venv .venv --upgrade-deps
+  pip install -r requirements.txt
+  pip install -e .
+  ```
 
 **"No module named 'typer'" or similar?**
 - Make sure your virtual environment is activated: `source .venv/bin/activate`
@@ -427,8 +458,8 @@ If you've forked this project and want to modify it, see:
 ```bash
 git clone <your-fork-url>
 cd quotes-manager
-python3 -m venv venv
-source venv/bin/activate
+python3.12 -m venv .venv || python3 -m venv .venv
+source .venv/bin/activate
 pip install -r requirements.txt  # Includes dev tools
 pre-commit install
 # See DEVELOPMENT.md for complete guide
